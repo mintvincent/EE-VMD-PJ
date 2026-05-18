@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BISTER × QIBAO — 듀얼 스토어</title>
+<style>
+:root{
+  --bg:#f0f0f2;--sur:#fff;--bdr:#e4e4e7;--bdr2:#f4f4f5;
+  --txt:#18181b;--mu:#71717a;--mu2:#a1a1aa;
+  --B:#b8832a;--C:#2a8a4a;--Bd:#fdf4e7;--Cd:#edf7f0;
+  --danger:#ef4444;--ok:#10b981;--info:#3b82f6;--warn:#f59e0b;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--txt);font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+.nav{display:flex;align-items:center;padding:0 28px;height:52px;background:var(--sur);border-bottom:1px solid var(--bdr);gap:16px;}
+.nav-brand{font-size:12px;font-weight:800;letter-spacing:3px;color:var(--mu)}
+.nav-links{display:flex;gap:6px;margin-left:auto;}
+.nl{color:var(--mu);text-decoration:none;font-size:11px;padding:5px 14px;border:1px solid var(--bdr);border-radius:4px;transition:all .15s;}
+.nl:hover{color:var(--B);border-color:var(--B);}
+.nl.cur{color:var(--B);border-color:var(--B);background:var(--Bd);}
+.hero{text-align:center;padding:40px 24px 24px;}
+.hero-title{font-size:30px;font-weight:800;letter-spacing:2px;margin-bottom:6px;}
+.hero-sub{font-size:13px;color:var(--mu);}
+.bB{color:var(--B);} .bC{color:var(--C);} .div{color:var(--mu2);margin:0 14px;}
+/* INSIGHT */
+.insight{margin:0 28px 24px;padding:14px 20px;background:var(--sur);border:1px solid var(--bdr);border-left:4px solid var(--info);border-radius:10px;display:flex;align-items:center;gap:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.insight.hide{display:none;}
+.ins-txt{font-size:12px;line-height:1.7;flex:1;}
+.ins-link{font-size:11px;padding:5px 12px;background:var(--info);color:#fff;border-radius:4px;text-decoration:none;white-space:nowrap;flex-shrink:0;}
+/* QUICK NAV */
+.quick-nav{display:flex;justify-content:center;gap:14px;padding:0 28px 28px;flex-wrap:wrap;}
+.qbtn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:18px 28px;background:var(--sur);border:1px solid var(--bdr);border-radius:10px;text-decoration:none;color:var(--txt);transition:all .2s;min-width:175px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.qbtn:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.1);}
+.qbtn.qb:hover{border-color:var(--B);} .qbtn.qc:hover{border-color:var(--C);} .qbtn.qa:hover{border-color:var(--info);}
+.q-icon{font-size:20px;} .q-label{font-size:12px;font-weight:700;} .q-sub{font-size:10px;color:var(--mu);}
+/* STORE */
+.store-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--bdr);}
+.store-panel{padding:28px 32px;background:var(--sur);}
+.store-panel:first-child{border-right:1px solid var(--bdr);}
+.store-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
+.store-name{font-size:19px;font-weight:800;letter-spacing:2px;}
+.store-loc{font-size:10px;color:var(--mu);margin-top:3px;}
+.ddate{font-size:10px;padding:3px 9px;border-radius:10px;}
+.ddate.ok{color:var(--ok);background:#f0fdf4;border:1px solid #86efac;}
+.ddate.no{color:var(--mu2);background:#fafafa;border:1px solid var(--bdr);}
+/* METRICS */
+.metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
+.metric{background:var(--bg);border:1px solid var(--bdr);border-radius:8px;padding:12px 14px;}
+.m-lbl{font-size:9px;letter-spacing:1px;color:var(--mu);margin-bottom:5px;}
+.m-val{font-size:17px;font-weight:800;line-height:1.2;}
+.m-sub{font-size:10px;color:var(--mu);margin-top:3px;}
+/* CAT BAR */
+.cat-wrap{margin-bottom:18px;}
+.cat-lbl{font-size:10px;color:var(--mu);margin-bottom:6px;}
+.cat-bar{display:flex;height:8px;border-radius:4px;overflow:hidden;gap:1px;}
+.cat-leg{display:flex;gap:10px;margin-top:5px;flex-wrap:wrap;}
+.cat-li{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--mu);}
+.cat-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+/* STATS */
+.stat-list{display:flex;flex-direction:column;border:1px solid var(--bdr);border-radius:8px;overflow:hidden;margin-bottom:18px;}
+.si{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid var(--bdr2);font-size:12px;}
+.si:last-child{border-bottom:none;}
+.sl{color:var(--mu);font-size:11px;} .sv{font-weight:600;font-size:11px;}
+.action-btn{display:block;width:100%;padding:12px;background:transparent;border:1px solid var(--bdr);border-radius:6px;color:var(--mu);font-size:11px;font-family:inherit;cursor:pointer;text-align:center;text-decoration:none;transition:all .2s;font-weight:600;}
+.action-btn.ab:hover{border-color:var(--B);color:var(--B);background:var(--Bd);}
+.action-btn.ac:hover{border-color:var(--C);color:var(--C);background:var(--Cd);}
+</style>
+
+<style>
+.export-bar{
+  display:flex;align-items:center;justify-content:flex-end;
+  padding:8px 24px;background:var(--sur);border-bottom:1px solid var(--bdr);
+  gap:10px;font-size:11px;color:var(--mu);
+}
+.export-bar .exp-note{flex:1;font-size:10px;color:var(--mu2);}
+#export-btn{
+  padding:6px 14px;background:#1a1a2e;color:#e8d5a3;
+  border:none;border-radius:5px;font-size:11px;font-weight:700;
+  cursor:pointer;letter-spacing:.5px;font-family:inherit;
+  transition:opacity .2s;
+}
+#export-btn:hover{opacity:.85;}
+#export-btn:disabled{opacity:.5;cursor:default;}
+</style>
+</head>
+<body>
+<div class="nav">
+  <span class="nav-brand">ELAND EBG</span>
+  <div class="nav-links">
+    <a class="nl cur" href="dual_store.html" data-i18n="nav_dual">듀얼 스토어</a>
+    <a class="nl" href="store_compare_vmd.html" data-i18n="nav_btm">하의 비교 분석</a>
+    <a class="nl" href="bister_floorplan.html" data-i18n="nav_bister">BISTER 도면</a>
+    <a class="nl" href="qibao_floorplan.html" data-i18n="nav_qibao">QIBAO 도면</a>
+    <button id="lang-toggle" onclick="toggleLang()" style="margin-left:8px;padding:4px 10px;border:1px solid var(--bdr);border-radius:4px;background:var(--sur);color:var(--mu);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px;font-family:inherit">KO</button>
+  </div>
+</div>
+
+<div class="export-bar">
+  <span class="exp-note" id="export-note">업로드된 데이터를 포함한 공유용 HTML 파일을 생성합니다</span>
+  <button id="export-btn" onclick="exportSharedFile()">📤 공유용 파일 내보내기</button>
+</div>
+
+<div class="hero">
+  <div class="hero-title"><span class="bB">BISTER</span><span class="div">×</span><span class="bC">QIBAO</span></div>
+  <div class="hero-sub" data-i18n="hero_sub">이랜드 EBG — 듀얼 스토어 VMD 대시보드</div>
+</div>
+
+<div class="quick-nav">
+  <a class="qbtn qa" href="store_compare_vmd.html"><span class="q-icon">🩳</span><span class="q-label" data-i18n="qbtn_btm_lbl">하의 비교 분석</span><span class="q-sub" data-i18n="qbtn_btm_sub">회전율 · 집기 효율 · 재고</span></a>
+  <a class="qbtn qb" href="bister_floorplan.html"><span class="q-icon" style="color:var(--B)">⬡</span><span class="q-label" style="color:var(--B)" data-i18n="qbtn_b_lbl">BISTER 도면</span><span class="q-sub" data-i18n="qbtn_b_sub">집기 클릭 → 상품·분석·편집</span></a>
+  <a class="qbtn qc" href="qibao_floorplan.html"><span class="q-icon" style="color:var(--C)">⬡</span><span class="q-label" style="color:var(--C)" data-i18n="qbtn_c_lbl">QIBAO 도면</span><span class="q-sub" data-i18n="qbtn_c_sub">집기 클릭 → 상품·분석·편집</span></a>
+</div>
+
+<div class="insight hide" id="ins" style="margin:0 28px 20px;">
+  <span style="font-size:18px;flex-shrink:0">💡</span>
+  <span class="ins-txt" id="ins-txt"></span>
+  <a class="ins-link" href="store_compare_vmd.html" data-i18n="ins_lnk">하의 비교 분석 →</a>
+</div>
+
+<div class="store-grid">
+  <!-- BISTER -->
+  <div class="store-panel">
+    <div class="store-head">
+      <div><div class="store-name bB">苏州 BISTER</div><div class="store-loc" data-i18n="loc_b">SUZHOU VILLAGE</div></div>
+      <span class="ddate no" id="b-date">데이터 없음</span>
+    </div>
+    <div class="metric-row">
+      <div class="metric"><div class="m-lbl" data-i18n="rev_w">여성 매출 (¥)</div><div class="m-val bB" id="b-rev">—</div><div class="m-sub" id="b-rev-krw" data-i18n="upload_after">엑셀 업로드 후</div></div>
+      <div class="metric"><div class="m-lbl" data-i18n="btm_w">여성 하의 스타일</div><div class="m-val bB" id="b-btm">—</div><div class="m-sub" id="b-btm-sub">—</div></div>
+      <div class="metric"><div class="m-lbl" data-i18n="turn_w">하의 회전율</div><div class="m-val bB" id="b-turn">—</div><div class="m-sub" id="b-turn-sub">판매 ÷ 진열</div></div>
+    </div>
+    <div class="cat-wrap"><div class="cat-lbl" data-i18n="cat_ttl">카테고리 매출 구성</div><div class="cat-bar" id="b-catbar"></div><div class="cat-leg" id="b-catleg"></div></div>
+    <div class="stat-list">
+      <div class="si"><span class="sl" data-i18n="s_pins">집기 수량</span><span class="sv" id="b-pins">—</span></div>
+      <div class="si"><span class="sl" data-i18n="s_sku">스타일 수 / SKU</span><span class="sv" id="b-sku">—</span></div>
+      <div class="si"><span class="sl" data-i18n="s_qty">여성 판매 수량</span><span class="sv" id="b-qty">—</span></div>
+      <div class="si"><span class="sl" data-i18n="s_dqty">여성 진열 수량</span><span class="sv" id="b-dqty">—</span></div>
+      <div class="si"><span class="sl" data-i18n="s_btmrev">하의 매출 / 전체 비중</span><span class="sv bB" id="b-btm-rev">—</span></div>
+      <div class="si"><span class="sl" data-i18n="s_zero">미판매 하의</span><span class="sv" id="b-zero">—</span></div>
+      <div class="si"><span class="sl" data-i18n="s_eff">진열 1장당 매출</span><span class="sv" id="b-eff">—</span></div>
+      <div class="si"><span class="sl" data-i18n="s_top">TOP 집기</span><span class="sv bB" id="b-top">—</span></div>
+    </div>
+    <a class="action-btn ab" href="bister_floorplan.html" data-i18n="btn_b">→ BISTER 도면 상세 보기</a>
+  </div>
+
+  <!-- QIBAO -->
+  <div class="store-panel">
+    <div class="store-head">
+      <div><div class="store-name bC">上海七宝 QIBAO</div><div class="store-loc" data-i18n="loc_c">SHANGHAI QIBAO · 七宝</div></div>
+      <span class="ddate no" id="c-date">데이터 없음</span>
+    </div>
+    <div class="metric-row">
+      <div class="metric"><div class="m-lbl" data-i18n="rev_w">여성 매출 (¥)</div><div class="m-val bC" id="c-rev">—</div><div class="m-sub" id="c-rev-krw" data-i18n="upload_after">엑셀 업로드 후</div></div>
+      <div class="metric"><div class="m-lbl" data-i18n="btm_w">여성 하의 스타일</div><div class="m-val bC" id="c-btm">—</div><div class="m-sub" id="c-btm-sub">—</div></div>
+      <div class="metric"><div class="m-lbl" data-i18n="turn_w">하의 회전율</div><div class="m-val bC" id="c-turn">—</div><div class="m-sub" id="c-turn-sub">판매 ÷ 진열</div></div>
+    </div>
+    <div class="cat-wrap"><div class="cat-lbl" data-i18n="cat_ttl">카테고리 매출 구성</div><div class="cat-bar" id="c-catbar"></div><div class="cat-leg" id="c-catleg"></div></div>
+    <div class="stat-list">
+      <div class="si"><span class="sl" data-i18n="s_pins">집기 수량</span><span class="sv" id="c-pins">—</span></div>
+      <div class="si"><span class="sl" data-i18n="s_sku">스타일 수 / SKU</span><span class="sv" id="c-sku">—</span></div>
+      <div class="si"><span class="sl" data-i18n="s_qty">여성 판매 수량</span><span class="sv" id="c-qty">—</span></div>
+      <div class="si"><span class="sl" data-i18n="s_dqty">여성 진열 수량</span><span class="sv" id="c-dqty">—</span></div>
+      <div class="si"><span class="sl" data-i18n="s_btmrev">하의 매출 / 전체 비중</span><span class="sv bC" id="c-btm-rev">—</span></div>
+      <div class="si"><span class="sl" data-i18n="s_zero">미판매 하의</span><span class="sv" id="c-zero">—</span></div>
+      <div class="si"><span class="sl" data-i18n="s_eff">진열 1장당 매출</span><span class="sv" id="c-eff">—</span></div>
+      <div class="si"><span class="sl" data-i18n="s_top">TOP 집기</span><span class="sv bC" id="c-top">—</span></div>
+    </div>
+    <a class="action-btn ac" href="qibao_floorplan.html" data-i18n="btn_c">→ QIBAO 도면 상세 보기</a>
+  </div>
+</div>
+
+<script>
+const RATE=180;
+const BOTTOMS={'TA':1,'TC':1,'TH':1,'TJ':1,'TM':1,'WH':1,'WJ':1};
+const SM={
+  TA:{c:'하의'},TC:{c:'하의'},TH:{c:'하의'},TJ:{c:'하의'},TM:{c:'하의'},WH:{c:'하의'},WJ:{c:'하의'},
+  BW:{c:'상의'},CK:{c:'상의'},HW:{c:'상의'},JA:{c:'상의'},JH:{c:'상의'},JJ:{c:'상의'},JK:{c:'상의'},
+  JL:{c:'상의'},JP:{c:'상의'},JT:{c:'상의'},JW:{c:'상의'},KW:{c:'상의'},LA:{c:'상의'},MT:{c:'상의'},
+  OK:{c:'상의'},RA:{c:'상의'},RN:{c:'상의'},RS:{c:'상의'},SK:{c:'상의'},VJ:{c:'상의'},VK:{c:'상의'},
+  VW:{c:'상의'},YA:{c:'상의'},YC:{c:'상의'},YP:{c:'상의'},YS:{c:'상의'},YW:{c:'상의'},
+  OM:{c:'원피스'},OW:{c:'원피스'},OJ:{c:'원피스'},
+};
+const CAT_COL={'상의':'#3b82f6','하의':'#8b5cf6','원피스':'#10b981','액세서리':'#f59e0b','기타':'#a1a1aa'};
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function wan(v){return v>=10000?(v/10000).toFixed(1)+'万':v>0?v.toLocaleString()+'¥':'0¥';}
+function krw(v){const w=Math.round(v*RATE);return w>=10000?(w/10000).toFixed(0)+'만원':w+'원';}
+
+const PRESET_B_XD={"disp": {"F001": [{"bc": "EEVWG24E0159165", "qty": 1}, {"bc": "EEVWG24E0139165", "qty": 1}, {"bc": "EEYWG25E0339160", "qty": 1}, {"bc": "EEWHG24E0239160", "qty": 1}, {"bc": "EERAG24E0439170", "qty": 1}, {"bc": "EEYWG25E0159165", "qty": 1}, {"bc": "EETAG24E0259165", "qty": 1}, {"bc": "EEYWG25E0139160", "qty": 1}, {"bc": "EEWHG25B0839160", "qty": 1}, {"bc": "EEYWG25E0339165", "qty": 1}, {"bc": "EEWHG24E0239165", "qty": 1}, {"bc": "EEYWG25E0339165", "qty": 1}, {"bc": "EEWHG24E0239165", "qty": 1}], "F002": [{"bc": "EEVWG24E0159160", "qty": 1}, {"bc": "EERAG24E0439160", "qty": 1}, {"bc": "EEWHG23B0250160", "qty": 1}, {"bc": "EECKG23B0359170", "qty": 1}, {"bc": "EEKWG25E0259170", "qty": 1}, {"bc": "EETJG24E0157028", "qty": 1}, {"bc": "EEKWG25E0259160", "qty": 1}, {"bc": "EETAG24E0259160", "qty": 1}, {"bc": "EETAG24E0259165", "qty": 1}, {"bc": "EEKWG25E0159165", "qty": 1}, {"bc": "EEKWG25E0159160", "qty": 1}, {"bc": "EEJAG23E0139170", "qty": 1}, {"bc": "EEJAG23E0139160", "qty": 1}, {"bc": "EEOWG25B0439160", "qty": 1}, {"bc": "EEOWG25B0439165", "qty": 1}, {"bc": "EEOWG25E0259165", "qty": 1}, {"bc": "EEOWG25E0259160", "qty": 1}, {"bc": "EEWHG25E0139155", "qty": 1}, {"bc": "EEHWG25B0139165", "qty": 1}, {"bc": "EEHWG25B0139160", "qty": 1}], "F003": [{"bc": "EEWHG25B0839160", "qty": 1}, {"bc": "EEWHG23E0139160", "qty": 1}, {"bc": "EEWHG24E5639160", "qty": 1}, {"bc": "EEVWG24E0139160", "qty": 1}, {"bc": "EETHG25E0439160", "qty": 1}, {"bc": "EEYWG25E0139165", "qty": 1}, {"bc": "EECKG24E0239170", "qty": 1}, {"bc": "EECKG24E0239165", "qty": 1}, {"bc": "EEWHG24E0159160", "qty": 1}, {"bc": "EETHG25E0459165", "qty": 1}, {"bc": "EETHG25E0459160", "qty": 1}, {"bc": "EEYPG24E0101165", "qty": 1}, {"bc": "EEYPG24E0101160", "qty": 1}, {"bc": "EEVKG25B0339165", "qty": 1}, {"bc": "EEOWG25E0239160", "qty": 1}, {"bc": "EEOWG25E0239165", "qty": 1}, {"bc": "EEWHG24E0259165", "qty": 1}, {"bc": "EEWHG24E0259160", "qty": 1}, {"bc": "EEOWG25B0599165", "qty": 1}, {"bc": "EEOWG25B0599160", "qty": 1}], "F004": [{"bc": "EETCG24E0619170", "qty": 1}, {"bc": "EEWHG25B0699160", "qty": 1}, {"bc": "EEOWG25B0799170", "qty": 1}, {"bc": "EEYWG24E0139165", "qty": 1}, {"bc": "EEOWG25B0799165", "qty": 1}, {"bc": "EEOWG25E0139160", "qty": 1}, {"bc": "EEOWG25E0139165", "qty": 1}, {"bc": "EEWHG25E0119165", "qty": 1}, {"bc": "EEWHG25E0119160", "qty": 1}, {"bc": "EEOWG25Q9119160", "qty": 1}, {"bc": "EEOWG25Q9119165", "qty": 1}, {"bc": "EEKWG25E0139160", "qty": 1}, {"bc": "EEVKG25B0299160", "qty": 1}, {"bc": "EEVKG25B0299170", "qty": 1}, {"bc": "EEVWG25B0119165", "qty": 1}, {"bc": "EEVWG25B0119165", "qty": 1}], "F005": [{"bc": "EERNG23E0118160", "qty": 1}, {"bc": "EEYWG24E0130165", "qty": 1}, {"bc": "EERNG23E0118170", "qty": 1}, {"bc": "EEYWG23E0126160", "qty": 1}, {"bc": "EEYWG23E0139160", "qty": 1}, {"bc": "EEYWG24E0142165", "qty": 1}, {"bc": "EEYWG23E0188165", "qty": 1}, {"bc": "EERNG23E0139160", "qty": 1}, {"bc": "EEYWG24E0150165", "qty": 1}, {"bc": "EEYWG23E0151165", "qty": 1}, {"bc": "EEYWG24E0188165", "qty": 1}, {"bc": "EERNG23E0139160", "qty": 1}, {"bc": "EERNG23E0139165", "qty": 1}, {"bc": "EEYWG37E0185160", "qty": 1}], "F006": [{"bc": "EEWHG25E0339160", "qty": 1}, {"bc": "EEYAG26B0439160", "qty": 1}, {"bc": "EEYAG26B0439165", "qty": 1}, {"bc": "EEWHG25E0339165", "qty": 1}, {"bc": "EEWHG25E0351160", "qty": 1}, {"bc": "EEWHG25E0351155", "qty": 1}, {"bc": "EEVKG25E0130170", "qty": 1}, {"bc": "EEVKG25E0130165", "qty": 1}, {"bc": "EEYWG25E0330165", "qty": 1}, {"bc": "EEYWG25E0330160", "qty": 1}, {"bc": "EEWHG64S0339160", "qty": 1}, {"bc": "EEWHG64S0339160", "qty": 1}, {"bc": "EEOWG25B1332160", "qty": 1}, {"bc": "EEOWG25B1332165", "qty": 1}, {"bc": "EEYAG24B0239160", "qty": 1}, {"bc": "EEYAG24B0239165", "qty": 1}, {"bc": "EEWJG23B0157160", "qty": 1}, {"bc": "EEWJG23B0157165", "qty": 1}, {"bc": "EEOWG25B1351160", "qty": 1}, {"bc": "EEOWG25B1351165", "qty": 1}, {"bc": "EEOWG25Q9231170", "qty": 1}], "F007": [{"bc": "EEJAG24B0239160", "qty": 1}, {"bc": "EEOWG25Q9179160", "qty": 1}, {"bc": "EEOWG25Q9179165", "qty": 1}, {"bc": "EEYAG23B0339165", "qty": 1}, {"bc": "EEYAG25B0139165", "qty": 1}, {"bc": "EEJAG24B0239165", "qty": 1}, {"bc": "EECKG23B0464170", "qty": 1}, {"bc": "EECKG23B0464160", "qty": 1}, {"bc": "EETCG24E0641165", "qty": 1}, {"bc": "EETCG24E0641155", "qty": 1}, {"bc": "EEOWG25B0239160", "qty": 1}, {"bc": "EEOWG25B0239165", "qty": 1}, {"bc": "EEJAG24B0449170", "qty": 1}, {"bc": "EETHG24E0349165", "qty": 1}, {"bc": "EEYAG25B0439160", "qty": 1}, {"bc": "EEYAG25B0439165", "qty": 1}, {"bc": "EEOMG26B0164165", "qty": 1}, {"bc": "EEOMG26B0164160", "qty": 1}], "F008": [{"bc": "EETCG24E0636170", "qty": 1}, {"bc": "EEYWG25E0337165", "qty": 1}, {"bc": "EETCG24E0636165", "qty": 1}, {"bc": "EEYWG25E0337160", "qty": 1}, {"bc": "EEJAG23E0131160", "qty": 1}, {"bc": "EEJAG23E0131170", "qty": 1}, {"bc": "EEOWG24E0236160", "qty": 1}, {"bc": "EEOWG24E0236165", "qty": 1}, {"bc": "EEBWG23B0136165", "qty": 1}, {"bc": "EEWHG25E0137170", "qty": 1}, {"bc": "EEWHG25E0137165", "qty": 1}, {"bc": "EEOWG25Q9285165", "qty": 1}, {"bc": "EEOWG25Q9285165", "qty": 1}, {"bc": "EEYWG25E0236160", "qty": 1}, {"bc": "EEYWG25E0236165", "qty": 1}, {"bc": "EEOWG24B0237160", "qty": 1}, {"bc": "EEOWG24B0237165", "qty": 1}], "F009": [{"bc": "EEASG24Q1S39FRE", "qty": 1}, {"bc": "EEOWG26B0199165", "qty": 1}, {"bc": "EEOWG26B0199160", "qty": 1}, {"bc": "EEOWG26B0351160", "qty": 1}, {"bc": "EEOWG26B0351165", "qty": 1}, {"bc": "EEVKG25B0439160", "qty": 1}, {"bc": "EEKWG25E0151160", "qty": 1}, {"bc": "EEKWG25E0151165", "qty": 1}, {"bc": "EEWJG23B0255155", "qty": 1}, {"bc": "EEWJG23B0255165", "qty": 1}, {"bc": "EECKG25D0339170", "qty": 1}, {"bc": "EECKG25D0339170", "qty": 1}, {"bc": "EEYCG26E0199165", "qty": 1}, {"bc": "EEYCG26E0199165", "qty": 1}, {"bc": "EETJG24B5856025", "qty": 1}, {"bc": "EETJG24B5856028", "qty": 1}, {"bc": "EECKG23B0351170", "qty": 1}, {"bc": "EECKG23B0351170", "qty": 1}, {"bc": "EEYSG24E0450160", "qty": 1}, {"bc": "EEYSG24E0450165", "qty": 1}], "F010": [{"bc": "EERAG23E0139160", "qty": 1}, {"bc": "EEVKG23B0255160", "qty": 1}, {"bc": "EERAG23E0239160", "qty": 1}, {"bc": "EEVKG23B0255165", "qty": 1}, {"bc": "EETJG25B0355027", "qty": 1}, {"bc": "EERNG25B0139165", "qty": 1}, {"bc": "EERNG25B0139160", "qty": 1}, {"bc": "EERNG25B0117160", "qty": 1}, {"bc": "EERNG25B0117165", "qty": 1}, {"bc": "EERNG25B0188165", "qty": 1}, {"bc": "EERNG25B0188170", "qty": 1}, {"bc": "EERNG23E0118170", "qty": 1}, {"bc": "EETJG25B0355026", "qty": 1}, {"bc": "EEOJG23B0156170", "qty": 1}, {"bc": "EEOJG23B0156160", "qty": 1}, {"bc": "EERAG26B0364170", "qty": 1}, {"bc": "EERAG26B0364165", "qty": 1}, {"bc": "EETJG23E0139026", "qty": 1}, {"bc": "EETJG23E0139027", "qty": 1}, {"bc": "EEYPG23E0155160", "qty": 1}, {"bc": "EEYWG24E0220170", "qty": 1}, {"bc": "EEYCG24E0250160", "qty": 1}, {"bc": "EEYCG24E0250165", "qty": 1}, {"bc": "EETJG23E0755025", "qty": 1}, {"bc": "EETJG23E0755027", "qty": 1}, {"bc": "EERAG23B0451160", "qty": 1}, {"bc": "EETCG23E1G49030", "qty": 1}], "F011": [{"bc": "EEYWG25E2G10170", "qty": 1}, {"bc": "EEYWG25E1G35175", "qty": 1}, {"bc": "EEYWG25E3G59170", "qty": 1}, {"bc": "EETCG23E1G59032", "qty": 1}, {"bc": "EETCG23E1G59030", "qty": 1}, {"bc": "EEYCG25B1G20170", "qty": 1}, {"bc": "EERAG25B1G49170", "qty": 1}, {"bc": "EEHWG23E1G10175", "qty": 1}, {"bc": "EERAG25B1G49175", "qty": 1}, {"bc": "EEHWG23E1G59175", "qty": 1}, {"bc": "EEHWG23E1G25175", "qty": 1}, {"bc": "EEYWG25E3G25175", "qty": 1}, {"bc": "EEYSG25B1G25175", "qty": 1}, {"bc": "EEYWG25E1G50175", "qty": 1}, {"bc": "EEYWG25E1G50170", "qty": 1}, {"bc": "EEYSG25B1G50180", "qty": 1}, {"bc": "EERSG25B1G40170", "qty": 1}, {"bc": "EERSG25B1G40175", "qty": 1}, {"bc": "EEHWG23E1G85175", "qty": 1}, {"bc": "EEHWG25D2G85175", "qty": 1}, {"bc": "EEYSG12E1G35175", "qty": 1}, {"bc": "EERAG25B2G64175", "qty": 1}, {"bc": "EEHWG23E1G40175", "qty": 1}, {"bc": "EEYWG25E3G40170", "qty": 1}, {"bc": "EEHWG23E1G10175", "qty": 1}, {"bc": "EETCG23E1G35032", "qty": 1}, {"bc": "EETCG23E1G35030", "qty": 1}, {"bc": "EEYWG25E1G84180", "qty": 1}, {"bc": "EEYWG25E1G35175", "qty": 1}, {"bc": "EEYWG25E2G10170", "qty": 1}], "F012": [{"bc": "EEKWG23E2G49175", "qty": 1}, {"bc": "EEKWG23E2G03175", "qty": 1}, {"bc": "EEKWG23E2G10170", "qty": 1}, {"bc": "EEKWG23E2G50175", "qty": 1}, {"bc": "EEHWG25B1G10175", "qty": 1}, {"bc": "EERAG23B2G59175", "qty": 1}, {"bc": "EETJG23E1G56032", "qty": 1}, {"bc": "EEYPG25B1G55170", "qty": 1}, {"bc": "EERAG23B2G59180", "qty": 1}, {"bc": "EEYPG12E1G55170", "qty": 1}, {"bc": "EETJG23E1G55032", "qty": 1}, {"bc": "EEHWG23B1G59170", "qty": 1}, {"bc": "EETJG23B1G39030", "qty": 1}, {"bc": "EETJG23B1G39032", "qty": 1}, {"bc": "EEYWG25E3G59175", "qty": 1}, {"bc": "EEJKG23B1G59170", "qty": 1}, {"bc": "EERAG25B2G64170", "qty": 1}, {"bc": "EERAG25E1G10175", "qty": 1}, {"bc": "EEHWG25B2G59175", "qty": 1}, {"bc": "EERAG25E1G59170", "qty": 1}, {"bc": "EERAG25E1G59175", "qty": 1}, {"bc": "EERSG23E1G50175", "qty": 1}, {"bc": "EEHWG25B2G40170", "qty": 1}, {"bc": "EERAG23B1G59170", "qty": 1}, {"bc": "EEHWG25B1G59175", "qty": 1}, {"bc": "EEHWG23E1G15175", "qty": 1}, {"bc": "EERSG23E1G59175", "qty": 1}, {"bc": "EEYWG25E1G59175", "qty": 1}], "T001": [{"bc": "EEKWG24E0339175", "qty": 1}, {"bc": "EEKWG24E0339160", "qty": 1}, {"bc": "EEKWG24E0359160", "qty": 1}, {"bc": "EEKWG24E0359160", "qty": 1}, {"bc": "EEYWG25E0339165", "qty": 1}, {"bc": "EEYWG25E0339165", "qty": 1}, {"bc": "EEYWG25E0339170", "qty": 1}, {"bc": "EECKG25B0439170", "qty": 1}, {"bc": "EECKG25B0439170", "qty": 1}, {"bc": "EECKG25B0439160", "qty": 1}, {"bc": "EEABG23B1G19FRE", "qty": 1}, {"bc": "EEJKG24B0136165", "qty": 1}, {"bc": "EEJKG24B0136160", "qty": 1}, {"bc": "EETHG25E0439170", "qty": 1}, {"bc": "EETHG25E0439165", "qty": 1}, {"bc": "EETHG25E0439155", "qty": 1}, {"bc": "EERNG23E0195170", "qty": 1}, {"bc": "EERNG23E0199165", "qty": 1}, {"bc": "EERNG23E0195160", "qty": 1}, {"bc": "EEKWG24E0239175", "qty": 1}, {"bc": "EEKWG24E0239170", "qty": 1}, {"bc": "EEKWG24E0239160", "qty": 1}], "T002": [{"bc": "EEAKF49M0256FRE", "qty": 1}, {"bc": "EEAKF49M0337FRE", "qty": 1}, {"bc": "EEYPG24E0156160", "qty": 1}, {"bc": "EEACG23E0150FRE", "qty": 1}, {"bc": "EERAG24E0151165", "qty": 1}, {"bc": "EERAG24E0151160", "qty": 1}, {"bc": "EERAG24E0139160", "qty": 1}, {"bc": "EERAG24E0139165", "qty": 1}, {"bc": "EEKWG24E0130175", "qty": 1}, {"bc": "EEKWG24E0130175", "qty": 1}, {"bc": "EEKWG24E0130160", "qty": 1}, {"bc": "EEKWG24E0130160", "qty": 1}, {"bc": "EEYPG23E0155170", "qty": 1}, {"bc": "EEYPG23E0155165", "qty": 1}, {"bc": "EEYPG23E0156160", "qty": 1}, {"bc": "EETJG24E0157027", "qty": 1}, {"bc": "EETJG24E0157027", "qty": 1}], "T003": [{"bc": "EETJG24E0155029", "qty": 1}, {"bc": "EETJG24E0155027", "qty": 1}, {"bc": "EETJG24E0155026", "qty": 1}, {"bc": "EEVKG25E0139165", "qty": 1}, {"bc": "EEVKG25E0139165", "qty": 1}, {"bc": "EEVKG24E0139170", "qty": 1}, {"bc": "EEVKG24E0139170", "qty": 1}, {"bc": "EEVKG24E0139160", "qty": 1}, {"bc": "EEWHG25B0839165", "qty": 1}, {"bc": "EEYWG25E0350165", "qty": 1}, {"bc": "EERAG25B1G49185", "qty": 1}, {"bc": "EERAG25B1G49180", "qty": 1}, {"bc": "EERAG25B1G49175", "qty": 1}, {"bc": "EERAG25B1G10175", "qty": 1}, {"bc": "EERAG25B1G10180", "qty": 1}, {"bc": "EERAG12E1G99170", "qty": 1}, {"bc": "EERAG12E1G99170", "qty": 1}, {"bc": "EEACG23E0150FRE", "qty": 1}, {"bc": "EEACG23E0188FRE", "qty": 1}, {"bc": "EEACG23E0136FRE", "qty": 1}, {"bc": "EEACG23E0159FRE", "qty": 1}], "H001": [{"bc": "EEOJG24E0139165", "qty": 1}, {"bc": "EEYWG25E0251160", "qty": 1}, {"bc": "EEWHG23B0250165", "qty": 1}, {"bc": "EEYWG25E0150165", "qty": 1}, {"bc": "EEYWG26B0139165", "qty": 1}, {"bc": "EEWHG64S0239170", "qty": 1}, {"bc": "EEYWG24E0251160", "qty": 1}, {"bc": "EEOJG24E0101170", "qty": 1}, {"bc": "EEWHG24E5639165", "qty": 1}, {"bc": "EEYPG24E0156165", "qty": 1}], "H002": [{"bc": "EETAG24E0239165", "qty": 1}, {"bc": "EETAG24E0239160", "qty": 1}, {"bc": "EETHG25E0435155", "qty": 1}, {"bc": "EETHG25E0435165", "qty": 1}, {"bc": "EETAG24E0235160", "qty": 1}, {"bc": "EETAG24E0235165", "qty": 1}, {"bc": "EEWHG24E0335160", "qty": 1}, {"bc": "EEWHG24E0335165", "qty": 1}, {"bc": "EETCG23E0135165", "qty": 1}, {"bc": "EETCG24E0135160", "qty": 1}, {"bc": "EETCG23E0159170", "qty": 1}, {"bc": "EETCG23E0159165", "qty": 1}, {"bc": "EEWHG24E0459160", "qty": 1}, {"bc": "EEWHG24E0459165", "qty": 1}, {"bc": "EETAG24B0359165", "qty": 1}, {"bc": "EETAG24E0459160", "qty": 1}, {"bc": "EEWHG24E5659155", "qty": 1}, {"bc": "EETAG24E0415165", "qty": 1}, {"bc": "EETAG24E0415160", "qty": 1}, {"bc": "EETMG25B5117165", "qty": 1}, {"bc": "EETCG64S0115160", "qty": 1}, {"bc": "EEWHG23R3115160", "qty": 1}, {"bc": "EEWHG24E0415160", "qty": 1}, {"bc": "EEWHG24E0415165", "qty": 1}, {"bc": "EETAG24B0336160", "qty": 1}, {"bc": "EETAG24B0359155", "qty": 1}, {"bc": "EETCG23E0259165", "qty": 1}, {"bc": "EETAG24E0259155", "qty": 1}, {"bc": "EEWHG23E0159170", "qty": 1}, {"bc": "EETJG24E0139027", "qty": 1}, {"bc": "EETJG24E0139028", "qty": 1}, {"bc": "EETJG24E0236026", "qty": 1}, {"bc": "EETJG24E0236027", "qty": 1}, {"bc": "EETMG25B5164165", "qty": 1}, {"bc": "EETMG25B5164160", "qty": 1}, {"bc": "EETJG23E0439027", "qty": 1}, {"bc": "EETCG64S0115165", "qty": 1}, {"bc": "EETCG24E0159160", "qty": 1}, {"bc": "EETCG24E0159160", "qty": 1}, {"bc": "EETJG24B5756026", "qty": 1}, {"bc": "EETJG24B5756027", "qty": 1}, {"bc": "EETJG23E0657026", "qty": 1}, {"bc": "EETJG23E0157026", "qty": 1}, {"bc": "EETJG23E0157028", "qty": 1}, {"bc": "EETJG24E0157027", "qty": 1}, {"bc": "EETJG24E0157029", "qty": 1}, {"bc": "EETJG23E0256026", "qty": 1}, {"bc": "EETJG23B0856025", "qty": 1}, {"bc": "EETJG23E0256027", "qty": 1}, {"bc": "EETJG23E0655026", "qty": 1}, {"bc": "EETJG23E0655027", "qty": 1}, {"bc": "EETJG24B5716025", "qty": 1}, {"bc": "EETJG23E0757026", "qty": 1}, {"bc": "EETJG23E0757027", "qty": 1}, {"bc": "EETJG23E0457028", "qty": 1}, {"bc": "EETJG23E0439026", "qty": 1}], "H003": [{"bc": "EEKWG24E0230160", "qty": 1}, {"bc": "EEOWG64S0226165", "qty": 1}, {"bc": "EEOWG64S0226160", "qty": 1}, {"bc": "EEOWG24E0135165", "qty": 1}, {"bc": "EEOWG24E0135160", "qty": 1}, {"bc": "EEOWG24B0250165", "qty": 1}, {"bc": "EEOWG24B0250160", "qty": 1}, {"bc": "EEOWG24E0259160", "qty": 1}, {"bc": "EEOWG24E0259165", "qty": 1}, {"bc": "EEOWG24E0159165", "qty": 1}, {"bc": "EEOWG24E0159160", "qty": 1}, {"bc": "EEYAG26B0359170", "qty": 1}, {"bc": "EEOWG25B0959165", "qty": 1}, {"bc": "EEYAG26B0359160", "qty": 1}, {"bc": "EEKWG24E0388165", "qty": 1}, {"bc": "EEKWG24E0388160", "qty": 1}, {"bc": "EEKWG24E0359170", "qty": 1}, {"bc": "EEKWG24E0359165", "qty": 1}, {"bc": "EEKWG24E0318165", "qty": 1}, {"bc": "EEKWG24E0318175", "qty": 1}, {"bc": "EEKWG24B5131165", "qty": 1}, {"bc": "EEKWG24B5131170", "qty": 1}, {"bc": "EEKWG24B5188170", "qty": 1}, {"bc": "EEKWG24B5139160", "qty": 1}, {"bc": "EEKWG24B5139165", "qty": 1}, {"bc": "EEVKG24E0139165", "qty": 1}, {"bc": "EEVKG24E0139160", "qty": 1}, {"bc": "EEVKG24E0118165", "qty": 1}, {"bc": "EEVKG24E0118160", "qty": 1}, {"bc": "EEKWG24E0215160", "qty": 1}, {"bc": "EEKWG24E0215165", "qty": 1}, {"bc": "EEKWG24E0118170", "qty": 1}, {"bc": "EEKWG24E0118160", "qty": 1}, {"bc": "EEKWG24E0251160", "qty": 1}, {"bc": "EEKWG24E0251170", "qty": 1}, {"bc": "EEKWG24E0288165", "qty": 1}, {"bc": "EEKWG24E0239160", "qty": 1}, {"bc": "EEKWG24E0230165", "qty": 1}, {"bc": "EEKWG24E0230160", "qty": 1}], "H004": [{"bc": "EEWHG23E0359160", "qty": 1}, {"bc": "EEWHG23E0335160", "qty": 1}, {"bc": "EEWJG24E0139155", "qty": 1}, {"bc": "EEWJG24E0139170", "qty": 1}, {"bc": "EEWJG23B0156160", "qty": 1}, {"bc": "EETHG25E0135160", "qty": 1}, {"bc": "EETHG25E0135155", "qty": 1}, {"bc": "EETHG24E0259160", "qty": 1}, {"bc": "EETHG24E0259170", "qty": 1}, {"bc": "EETJG24E0557026", "qty": 1}, {"bc": "EETJG24E0556027", "qty": 1}, {"bc": "EETJG24E0639026", "qty": 1}, {"bc": "EETJG24E0639027", "qty": 1}, {"bc": "EETJG24E0536028", "qty": 1}, {"bc": "EEWHG25E5259160", "qty": 1}, {"bc": "EEWHG25E5259165", "qty": 1}, {"bc": "EEVKG25E0118160", "qty": 1}, {"bc": "EEVKG25E0118170", "qty": 1}, {"bc": "EEKWG24B5216160", "qty": 1}, {"bc": "EEKWG25E0215160", "qty": 1}, {"bc": "EEKWG25E0215165", "qty": 1}, {"bc": "EECKG23E0227160", "qty": 1}, {"bc": "EECKG23E0227165", "qty": 1}, {"bc": "EECKG23E0231165", "qty": 1}, {"bc": "EECKG23E0231175", "qty": 1}, {"bc": "EEKWG24B5239160", "qty": 1}, {"bc": "EEKWG24B5239160", "qty": 1}, {"bc": "EECKG23E0239175", "qty": 1}, {"bc": "EECKG23E0239170", "qty": 1}, {"bc": "EECKG23E0250175", "qty": 1}, {"bc": "EECKG23E0250160", "qty": 1}], "H005": [{"bc": "EEYSG63S0250165", "qty": 1}, {"bc": "EEYSG63S0250160", "qty": 1}, {"bc": "EEYCG63S0151160", "qty": 1}, {"bc": "EEYSG23E0151170", "qty": 1}, {"bc": "EEYSG63S0126160", "qty": 1}, {"bc": "EEYSG23E0188165", "qty": 1}, {"bc": "EEYSG23E0188160", "qty": 1}, {"bc": "EEYSG23E0126165", "qty": 1}, {"bc": "EEYSG23E0126160", "qty": 1}, {"bc": "EEYSG63S0288160", "qty": 1}, {"bc": "EEYSG63S0288165", "qty": 1}, {"bc": "EEYSG63S0226160", "qty": 1}, {"bc": "EEYSG63S0226165", "qty": 1}, {"bc": "EEYCG63S0126160", "qty": 1}, {"bc": "EEYCG63S0126165", "qty": 1}, {"bc": "EEJAG24B0349165", "qty": 1}, {"bc": "EEJAG24B0349160", "qty": 1}, {"bc": "EEJAG24B0339165", "qty": 1}, {"bc": "EEJAG24B0339160", "qty": 1}, {"bc": "EEJAG24B0136160", "qty": 1}, {"bc": "EEJAG24B0136165", "qty": 1}, {"bc": "EETKG25D0139160", "qty": 1}, {"bc": "EETKG25D0139160", "qty": 1}, {"bc": "EEOWG25B1032165", "qty": 1}, {"bc": "EEOWG25B1032160", "qty": 1}, {"bc": "EEYCG24E0188165", "qty": 1}, {"bc": "EEKWG24B0888165", "qty": 1}, {"bc": "EEKWG24B0851160", "qty": 1}, {"bc": "EEHWG24E0239165", "qty": 1}, {"bc": "EEKWG24Q9388160", "qty": 1}, {"bc": "EEKWG24Q9388165", "qty": 1}, {"bc": "EEKWG23E0151175", "qty": 1}, {"bc": "EEKWG23E0159165", "qty": 1}, {"bc": "EEKWG62S0118165", "qty": 1}, {"bc": "EEKWG23E0115175", "qty": 1}, {"bc": "EEKWG23E0115165", "qty": 1}, {"bc": "EEKWG64L0330165", "qty": 1}, {"bc": "EEKWG64L0330160", "qty": 1}, {"bc": "EEKWG64L0326160", "qty": 1}, {"bc": "EEKWG62S0131160", "qty": 1}, {"bc": "EEKWG62S0131165", "qty": 1}, {"bc": "EEKWG24E0130165", "qty": 1}, {"bc": "EEKWG64S0239165", "qty": 1}, {"bc": "EEKWG24E0139160", "qty": 1}, {"bc": "EEKWG24E0139175", "qty": 1}], "H009": [{"bc": "EERAG24E0436160", "qty": 1}, {"bc": "EEWJG24E0139160", "qty": 1}, {"bc": "EEYCG23E0150170", "qty": 1}, {"bc": "EEYCG23E0150160", "qty": 1}, {"bc": "EECKG23E0150165", "qty": 1}, {"bc": "EECKG23E0150160", "qty": 1}, {"bc": "EECKG23E0115165", "qty": 1}, {"bc": "EECKG23E0115160", "qty": 1}, {"bc": "EELAG64S0139160", "qty": 1}, {"bc": "EEKWG24B0959160", "qty": 1}, {"bc": "EELAG23E0199160", "qty": 1}, {"bc": "EELAG23E0151160", "qty": 1}, {"bc": "EEKWG23E0150160", "qty": 1}, {"bc": "EERAG23E0126160", "qty": 1}, {"bc": "EERAG23E0126170", "qty": 1}, {"bc": "EERAG64S0126160", "qty": 1}, {"bc": "EELAG23E0125160", "qty": 1}, {"bc": "EERAG24E0151160", "qty": 1}, {"bc": "EERAG64S0151165", "qty": 1}, {"bc": "EERSG23E0151175", "qty": 1}, {"bc": "EERSG23E0151160", "qty": 1}, {"bc": "EERSG23E0140160", "qty": 1}, {"bc": "EERAG23E0151160", "qty": 1}, {"bc": "EERAG23E0151165", "qty": 1}, {"bc": "EERAG25E0151160", "qty": 1}, {"bc": "EERSG64S0115170", "qty": 1}, {"bc": "EERAG23E0220175", "qty": 1}, {"bc": "EERAG24B0618160", "qty": 1}, {"bc": "EERAG24B0618170", "qty": 1}, {"bc": "EERAG25E0318160", "qty": 1}, {"bc": "EERAG25E0339160", "qty": 1}, {"bc": "EERAG23B0439160", "qty": 1}, {"bc": "EERAG23E0239165", "qty": 1}, {"bc": "EERAG23E0239170", "qty": 1}, {"bc": "EERAG26B0217175", "qty": 1}, {"bc": "EERAG26B0217160", "qty": 1}, {"bc": "EERAG24E0436165", "qty": 1}, {"bc": "EERAG24E0485165", "qty": 1}, {"bc": "EERAG26B0264165", "qty": 1}, {"bc": "EETJG24E0655026", "qty": 1}, {"bc": "EERAG25E0151165", "qty": 1}], "M001": [{"bc": "EEVWG24E0159160", "qty": 1}, {"bc": "EEWHG24E0239160", "qty": 1}], "M002": [{"bc": "EEYPG24E0101160", "qty": 1}, {"bc": "EETJG24E0139027", "qty": 1}], "M004": [{"bc": "EEYWG25E1G50175", "qty": 1}, {"bc": "EEKWG23E2G10175", "qty": 1}, {"bc": "EETHG23B1G03030", "qty": 1}], "M005": [{"bc": "EEAKG25B0185FRE", "qty": 1}, {"bc": "EETCG24E0619165", "qty": 1}, {"bc": "EEVKG25E0139160", "qty": 1}], "M006": [{"bc": "EEOWG25B0439160", "qty": 1}], "M008": [{"bc": "EEOWG25B1332160", "qty": 1}], "M009": [{"bc": "EERNG23E0139160", "qty": 1}, {"bc": "EEYWG24E0150165", "qty": 1}, {"bc": "EETHG25E0439160", "qty": 1}], "M010": [{"bc": "EEKWG25E0259160", "qty": 1}, {"bc": "EEWHG25E0139160", "qty": 1}], "M011": [{"bc": "EEYWG25E3G40175", "qty": 1}, {"bc": "EERAG25B1G10175", "qty": 1}, {"bc": "EETJG23B1G39032", "qty": 1}], "M012": [{"bc": "EERAG23B2G59170", "qty": 1}, {"bc": "EEHWG23B1G59175", "qty": 1}, {"bc": "EETJG25E1G55032", "qty": 1}], "M013": [{"bc": "EEYPG25B1G55170", "qty": 1}, {"bc": "EERSG23E1G50170", "qty": 1}, {"bc": "EEABG23B1G22FRE", "qty": 1}, {"bc": "EETHG23B1G03032", "qty": 1}]}, "sales": {"EEABE24R01": {"qty": 0, "rev": 0, "price": 499.0}, "EEABG23B01": {"qty": 0, "rev": 0, "price": 499.0}, "EEABG23B1G": {"qty": 0, "rev": 0, "price": 599.0}, "EEABG23B51": {"qty": 0, "rev": 0, "price": 199.0}, "EEACG23E01": {"qty": 10.0, "rev": 191.0, "price": 299.0}, "EEACG25D01": {"qty": 0, "rev": 0, "price": 399.0}, "EEAKE24R01": {"qty": 0, "rev": 0, "price": 799.0}, "EEAKF25N51": {"qty": 0, "rev": 0, "price": 1299.0}, "EEAKF49M02": {"qty": 3.0, "rev": 513.0, "price": 899.0}, "EEAKF49M03": {"qty": 0, "rev": 0, "price": 1299.0}, "EEAKG23B01": {"qty": 0, "rev": 0, "price": 999.0}, "EEAKG25B01": {"qty": 0, "rev": 0, "price": 1299.0}, "EEAKG25E01": {"qty": 0, "rev": 0, "price": 1599.0}, "EEASE23Y01": {"qty": 0, "rev": 0, "price": 199.0}, "EEASE25Y01": {"qty": 0, "rev": 0, "price": 299.0}, "EEASF49N52": {"qty": 0, "rev": 0, "price": 299.0}, "EEASG24Q1S": {"qty": 0, "rev": 0, "price": 299.0}, "EEAYE49M01": {"qty": 3.0, "rev": 187.0, "price": 69.0}, "EEBWG23B01": {"qty": 3.0, "rev": 1556.0, "price": 799.0}, "EEBWG23B02": {"qty": 3.0, "rev": 749.0, "price": 799.0}, "EECKF23E01": {"qty": 5.0, "rev": 1495.0, "price": 699.0}, "EECKF23E02": {"qty": 0, "rev": 0, "price": 699.0}, "EECKF23M03": {"qty": 5.0, "rev": 1557.0, "price": 699.0}, "EECKF24E03": {"qty": 2.0, "rev": 649.0, "price": 699.0}, "EECKF24M01": {"qty": 0, "rev": 0, "price": 699.0}, "EECKF24N52": {"qty": 1.0, "rev": 0, "price": 699.0}, "EECKF24N54": {"qty": 15.0, "rev": 276.0, "price": 599.0}, "EECKF24T7A": {"qty": 12.0, "rev": 2875.0, "price": 699.0}, "EECKF25T71": {"qty": 0, "rev": 0, "price": 699.0}, "EECKF26N51": {"qty": 6.0, "rev": 1419.0, "price": 599.0}, "EECKF37R32": {"qty": 6.0, "rev": 1921.0, "price": 699.0}, "EECKG11E01": {"qty": 5.0, "rev": 417.0, "price": 899.0}, "EECKG12B02": {"qty": 1.0, "rev": 417.0, "price": 899.0}, "EECKG12B03": {"qty": 0, "rev": 0, "price": 1299.0}, "EECKG12B1G": {"qty": 0, "rev": 0, "price": 999.0}, "EECKG23B03": {"qty": 8.0, "rev": 3914.0, "price": 799.0}, "EECKG23B04": {"qty": 2.0, "rev": 1159.0, "price": 899.0}, "EECKG23E01": {"qty": 11.0, "rev": 2787.0, "price": 699.0}, "EECKG23E02": {"qty": 29.0, "rev": 12511.0, "price": 699.0}, "EECKG24E02": {"qty": 13.0, "rev": 5904.0, "price": 699.0}, "EECKG25B04": {"qty": 2.0, "rev": 802.0, "price": 599.0}, "EECKG25D03": {"qty": 4.0, "rev": 1783.0, "price": 899.0}, "EECKG62S01": {"qty": 0, "rev": 0, "price": 899.0}, "EEHWF24E01": {"qty": 0, "rev": 0, "price": 499.0}, "EEHWF24E02": {"qty": 0, "rev": 0, "price": 499.0}, "EEHWF25M01": {"qty": 0, "rev": 0, "price": 499.0}, "EEHWG23B1G": {"qty": 3.0, "rev": 447.0, "price": 699.0}, "EEHWG23E1G": {"qty": 15.0, "rev": 2686.0, "price": 599.0}, "EEHWG24E02": {"qty": 2.0, "rev": 388.0, "price": 599.0}, "EEHWG25B01": {"qty": 7.0, "rev": 2028.0, "price": 499.0}, "EEHWG25B1G": {"qty": 2.0, "rev": 895.0, "price": 699.0}, "EEHWG25B2G": {"qty": 2.0, "rev": 945.0, "price": 699.0}, "EEHWG25D1G": {"qty": 2.0, "rev": 1026.0, "price": 799.0}, "EEHWG25D2G": {"qty": 2.0, "rev": 443.0, "price": 699.0}, "EEJAG12B1G": {"qty": 0, "rev": 0, "price": 1599.0}, "EEJAG12E1G": {"qty": 0, "rev": 0, "price": 1299.0}, "EEJAG12E2G": {"qty": 0, "rev": 0, "price": 1599.0}, "EEJAG23B03": {"qty": 0, "rev": 0, "price": 1599.0}, "EEJAG23B04": {"qty": 0, "rev": 0, "price": 1599.0}, "EEJAG23B51": {"qty": 0, "rev": 0, "price": 1599.0}, "EEJAG23D1G": {"qty": 2.0, "rev": 821.0, "price": 1299.0}, "EEJAG23E01": {"qty": 14.0, "rev": 5009.0, "price": 1299.0}, "EEJAG23E02": {"qty": 0, "rev": 0, "price": 1599.0}, "EEJAG23R01": {"qty": 0, "rev": 0, "price": 1999.0}, "EEJAG24B01": {"qty": 1.0, "rev": 1030.0, "price": 1599.0}, "EEJAG24B02": {"qty": 4.0, "rev": 3052.0, "price": 1599.0}, "EEJAG24B03": {"qty": 1.0, "rev": 909.0, "price": 1299.0}, "EEJAG24B04": {"qty": 27.0, "rev": 20546.0, "price": 1599.0}, "EEJJG23B01": {"qty": 1.0, "rev": 0, "price": 899.0}, "EEJJG23D03": {"qty": 0, "rev": 0, "price": 1599.0}, "EEJJG23D1G": {"qty": 3.0, "rev": 830.0, "price": 1299.0}, "EEJJG23D2G": {"qty": 3.0, "rev": 909.0, "price": 1299.0}, "EEJKF24M02": {"qty": 0, "rev": 0, "price": 1299.0}, "EEJKG23B1G": {"qty": 1.0, "rev": 1050.0, "price": 1599.0}, "EEJKG24B01": {"qty": 2.0, "rev": 2029.0, "price": 1599.0}, "EEJLG11D01": {"qty": 0, "rev": 0, "price": 1599.0}, "EEJLG11D51": {"qty": 0, "rev": 0, "price": 1999.0}, "EEJTF23M01": {"qty": 0, "rev": 0, "price": 1799.0}, "EEJTG12E01": {"qty": 1.0, "rev": 600.0, "price": 1999.0}, "EEJTG12E02": {"qty": 0, "rev": 0, "price": 1999.0}, "EEKWF24E02": {"qty": 5.0, "rev": 1474.0, "price": 599.0}, "EEKWF24E05": {"qty": 1.0, "rev": 0, "price": 599.0}, "EEKWF25E01": {"qty": 1.0, "rev": 0, "price": 599.0}, "EEKWF38E01": {"qty": 3.0, "rev": 841.0, "price": 599.0}, "EEKWG12B05": {"qty": 0, "rev": 0, "price": 999.0}, "EEKWG12B1G": {"qty": 0, "rev": 0, "price": 799.0}, "EEKWG12E1G": {"qty": 1.0, "rev": 418.0, "price": 899.0}, "EEKWG23D02": {"qty": 6.0, "rev": 2283.0, "price": 699.0}, "EEKWG23E01": {"qty": 14.0, "rev": 3367.0, "price": 499.0}, "EEKWG23E1G": {"qty": 0, "rev": 0, "price": 599.0}, "EEKWG23E2G": {"qty": 31.0, "rev": 9690.0, "price": 699.0}, "EEKWG23Q1G": {"qty": 0, "rev": 0, "price": 899.0}, "EEKWG24B08": {"qty": 3.0, "rev": 1634.0, "price": 799.0}, "EEKWG24B09": {"qty": 5.0, "rev": 1545.0, "price": 799.0}, "EEKWG24B51": {"qty": 23.0, "rev": 10877.0, "price": 799.0}, "EEKWG24B52": {"qty": 20.0, "rev": 8050.0, "price": 599.0}, "EEKWG24E01": {"qty": 42.0, "rev": 14049.0, "price": 699.0}, "EEKWG24E02": {"qty": 55.0, "rev": 17471.0, "price": 699.0}, "EEKWG24E03": {"qty": 16.0, "rev": 5927.0, "price": 699.0}, "EEKWG24Q93": {"qty": 0, "rev": 0, "price": 699.0}, "EEKWG25E01": {"qty": 1.0, "rev": 384.0, "price": 599.0}, "EEKWG25E02": {"qty": 4.0, "rev": 1539.0, "price": 699.0}, "EEKWG62S01": {"qty": 6.0, "rev": 1781.0, "price": 699.0}, "EEKWG64L03": {"qty": 2.0, "rev": 676.0, "price": 699.0}, "EEKWG64S02": {"qty": 11.0, "rev": 1901.0, "price": 699.0}, "EELAF23M01": {"qty": 0, "rev": 0, "price": 499.0}, "EELAF23M02": {"qty": 0, "rev": 0, "price": 599.0}, "EELAF24M01": {"qty": 0, "rev": 0, "price": 699.0}, "EELAG12B04": {"qty": 0, "rev": 0, "price": 599.0}, "EELAG12D1G": {"qty": 0, "rev": 0, "price": 799.0}, "EELAG12D2G": {"qty": 0, "rev": 0, "price": 799.0}, "EELAG23E01": {"qty": 12.0, "rev": 4788.0, "price": 699.0}, "EELAG64S01": {"qty": 11.0, "rev": 2513.0, "price": 599.0}, "EEMTG12B1G": {"qty": 0, "rev": 0, "price": 699.0}, "EEMTG12E01": {"qty": 0, "rev": 0, "price": 899.0}, "EEMTG23Q1G": {"qty": 0, "rev": 0, "price": 799.0}, "EEOJG23B01": {"qty": 3.0, "rev": 1757.0, "price": 1299.0}, "EEOJG23B02": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOJG24B03": {"qty": 5.0, "rev": 3276.0, "price": 999.0}, "EEOJG24E01": {"qty": 25.0, "rev": 17860.0, "price": 1599.0}, "EEOMG25B01": {"qty": 1.0, "rev": 0, "price": 799.0}, "EEOMG26B01": {"qty": 2.0, "rev": 1282.0, "price": 999.0}, "EEOWG24B01": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOWG24B02": {"qty": 3.0, "rev": 2505.0, "price": 1299.0}, "EEOWG24B03": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOWG24E01": {"qty": 5.0, "rev": 4158.0, "price": 1299.0}, "EEOWG24E02": {"qty": 13.0, "rev": 5830.0, "price": 1299.0}, "EEOWG24E03": {"qty": 1.0, "rev": 0, "price": 1299.0}, "EEOWG25B02": {"qty": 2.0, "rev": 909.0, "price": 1299.0}, "EEOWG25B03": {"qty": 1.0, "rev": 0, "price": 1299.0}, "EEOWG25B04": {"qty": 3.0, "rev": 847.0, "price": 1299.0}, "EEOWG25B05": {"qty": 2.0, "rev": 2066.0, "price": 1599.0}, "EEOWG25B07": {"qty": 3.0, "rev": 1659.0, "price": 1299.0}, "EEOWG25B09": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOWG25B10": {"qty": 1.0, "rev": 827.0, "price": 1299.0}, "EEOWG25B11": {"qty": 2.0, "rev": 699.0, "price": 999.0}, "EEOWG25B12": {"qty": 2.0, "rev": 1672.0, "price": 1299.0}, "EEOWG25B13": {"qty": 8.0, "rev": 6379.0, "price": 1299.0}, "EEOWG25E01": {"qty": 13.0, "rev": 3827.0, "price": 999.0}, "EEOWG25E02": {"qty": 4.0, "rev": 2540.0, "price": 999.0}, "EEOWG25Q91": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOWG25Q92": {"qty": 15.0, "rev": 12230.0, "price": 1299.0}, "EEOWG26B01": {"qty": 4.0, "rev": 3464.0, "price": 1299.0}, "EEOWG26B03": {"qty": 1.0, "rev": 909.0, "price": 1299.0}, "EEOWG64S02": {"qty": 43.0, "rev": 14578.0, "price": 999.0}, "EERAF23E01": {"qty": 6.0, "rev": 855.0, "price": 299.0}, "EERAF23E02": {"qty": 4.0, "rev": 555.0, "price": 299.0}, "EERAF23Q92": {"qty": 5.0, "rev": 0, "price": 399.0}, "EERAF37M02": {"qty": 0, "rev": 0, "price": 399.0}, "EERAF37N51": {"qty": 0, "rev": 0, "price": 499.0}, "EERAF37N52": {"qty": 0, "rev": 0, "price": 299.0}, "EERAF37R31": {"qty": 0, "rev": 0, "price": 299.0}, "EERAF37R32": {"qty": 0, "rev": 0, "price": 299.0}, "EERAF37R33": {"qty": 0, "rev": 0, "price": 399.0}, "EERAF37R35": {"qty": 0, "rev": 0, "price": 399.0}, "EERAG12E1G": {"qty": 6.0, "rev": 816.0, "price": 599.0}, "EERAG12E2G": {"qty": 6.0, "rev": 725.0, "price": 399.0}, "EERAG23B04": {"qty": 8.0, "rev": 2937.0, "price": 599.0}, "EERAG23B1G": {"qty": 7.0, "rev": 1375.0, "price": 399.0}, "EERAG23B2G": {"qty": 5.0, "rev": 967.0, "price": 499.0}, "EERAG23E01": {"qty": 8.0, "rev": 1805.0, "price": 399.0}, "EERAG23E02": {"qty": 10.0, "rev": 1376.0, "price": 399.0}, "EERAG24B05": {"qty": 1.0, "rev": 349.0, "price": 499.0}, "EERAG24B06": {"qty": 7.0, "rev": 967.0, "price": 499.0}, "EERAG24E01": {"qty": 9.0, "rev": 1926.0, "price": 399.0}, "EERAG24E02": {"qty": 3.0, "rev": 349.0, "price": 499.0}, "EERAG24E03": {"qty": 0, "rev": 0, "price": 599.0}, "EERAG24E04": {"qty": 71.0, "rev": 13953.0, "price": 499.0}, "EERAG25B1G": {"qty": 4.0, "rev": 971.0, "price": 499.0}, "EERAG25B2G": {"qty": 1.0, "rev": 349.0, "price": 499.0}, "EERAG25E01": {"qty": 0, "rev": 0, "price": 499.0}, "EERAG25E02": {"qty": 13.0, "rev": 1563.0, "price": 399.0}, "EERAG25E03": {"qty": 14.0, "rev": 2609.0, "price": 499.0}, "EERAG25E1G": {"qty": 3.0, "rev": 0, "price": 399.0}, "EERAG26B02": {"qty": 7.0, "rev": 1801.0, "price": 399.0}, "EERAG26B03": {"qty": 3.0, "rev": 965.0, "price": 499.0}, "EERAG64S01": {"qty": 32.0, "rev": 2552.0, "price": 399.0}, "EERNF24M01": {"qty": 0, "rev": 0, "price": 299.0}, "EERNF24M02": {"qty": 0, "rev": 0, "price": 299.0}, "EERNG23E01": {"qty": 52.0, "rev": 5409.0, "price": 299.0}, "EERNG24E51": {"qty": 4.0, "rev": 252.0, "price": 199.0}, "EERNG25B01": {"qty": 9.0, "rev": 1046.0, "price": 399.0}, "EERSF23E01": {"qty": 0, "rev": 0, "price": 399.0}, "EERSF23E02": {"qty": 1.0, "rev": 0, "price": 499.0}, "EERSF23N51": {"qty": 1.0, "rev": 0, "price": 399.0}, "EERSG23E01": {"qty": 10.0, "rev": 2017.0, "price": 399.0}, "EERSG23E1G": {"qty": 7.0, "rev": 1253.0, "price": 499.0}, "EERSG24B01": {"qty": 2.0, "rev": 535.0, "price": 399.0}, "EERSG25B01": {"qty": 0, "rev": 0, "price": 499.0}, "EERSG25B1G": {"qty": 4.0, "rev": 0, "price": 499.0}, "EERSG64S01": {"qty": 29.0, "rev": 2244.0, "price": 399.0}, "EETAF24M01": {"qty": 0, "rev": 0, "price": 699.0}, "EETAG24B03": {"qty": 11.0, "rev": 4943.0, "price": 899.0}, "EETAG24E02": {"qty": 42.0, "rev": 15195.0, "price": 899.0}, "EETAG24E04": {"qty": 4.0, "rev": 1078.0, "price": 799.0}, "EETCF23M02": {"qty": 0, "rev": 0, "price": 799.0}, "EETCF24E01": {"qty": 0, "rev": 0, "price": 699.0}, "EETCF24M02": {"qty": 7.0, "rev": 2483.0, "price": 899.0}, "EETCF37N51": {"qty": 8.0, "rev": 3367.0, "price": 899.0}, "EETCG12D1G": {"qty": 0, "rev": 0, "price": 999.0}, "EETCG12E02": {"qty": 0, "rev": 0, "price": 799.0}, "EETCG23E01": {"qty": 9.0, "rev": 3158.0, "price": 799.0}, "EETCG23E02": {"qty": 2.0, "rev": 644.0, "price": 999.0}, "EETCG23E1G": {"qty": 6.0, "rev": 2553.0, "price": 899.0}, "EETCG24E01": {"qty": 7.0, "rev": 2264.0, "price": 699.0}, "EETCG24E06": {"qty": 38.0, "rev": 18337.0, "price": 1299.0}, "EETCG64S01": {"qty": 3.0, "rev": 1160.0, "price": 799.0}, "EETHF23T71": {"qty": 0, "rev": 0, "price": 699.0}, "EETHG23B1G": {"qty": 0, "rev": 0, "price": 799.0}, "EETHG24E02": {"qty": 2.0, "rev": 379.0, "price": 599.0}, "EETHG24E03": {"qty": 3.0, "rev": 1167.0, "price": 699.0}, "EETHG25E01": {"qty": 23.0, "rev": 6400.0, "price": 699.0}, "EETHG25E04": {"qty": 31.0, "rev": 7501.0, "price": 699.0}, "EETHG25E1G": {"qty": 0, "rev": 0, "price": 699.0}, "EETJF23E06": {"qty": 0, "rev": 0, "price": 899.0}, "EETJF23E07": {"qty": 0, "rev": 0, "price": 799.0}, "EETJF23E09": {"qty": 0, "rev": 0, "price": 899.0}, "EETJF24E01": {"qty": 0, "rev": 0, "price": 799.0}, "EETJF24M04": {"qty": 4.0, "rev": 1340.0, "price": 799.0}, "EETJF25M01": {"qty": 0, "rev": 0, "price": 499.0}, "EETJF25M03": {"qty": 0, "rev": 0, "price": 599.0}, "EETJF25M04": {"qty": 0, "rev": 0, "price": 699.0}, "EETJF25N52": {"qty": 0, "rev": 0, "price": 899.0}, "EETJF25N54": {"qty": 0, "rev": 0, "price": 999.0}, "EETJF66L03": {"qty": 0, "rev": 0, "price": 799.0}, "EETJG23B03": {"qty": 0, "rev": 0, "price": 799.0}, "EETJG23B05": {"qty": 3.0, "rev": 0, "price": 899.0}, "EETJG23B08": {"qty": 7.0, "rev": 1750.0, "price": 699.0}, "EETJG23B1G": {"qty": 4.0, "rev": 1719.0, "price": 899.0}, "EETJG23E01": {"qty": 15.0, "rev": 5873.0, "price": 699.0}, "EETJG23E02": {"qty": 12.0, "rev": 4089.0, "price": 799.0}, "EETJG23E04": {"qty": 28.0, "rev": 10310.0, "price": 899.0}, "EETJG23E06": {"qty": 3.0, "rev": 1537.0, "price": 799.0}, "EETJG23E07": {"qty": 21.0, "rev": 9468.0, "price": 899.0}, "EETJG23E1G": {"qty": 4.0, "rev": 899.0, "price": 899.0}, "EETJG23Q1G": {"qty": 0, "rev": 0, "price": 899.0}, "EETJG24B57": {"qty": 5.0, "rev": 2894.0, "price": 899.0}, "EETJG24B58": {"qty": 3.0, "rev": 1848.0, "price": 899.0}, "EETJG24E01": {"qty": 77.0, "rev": 22272.0, "price": 799.0}, "EETJG24E02": {"qty": 11.0, "rev": 3151.0, "price": 699.0}, "EETJG24E04": {"qty": 0, "rev": 0, "price": 699.0}, "EETJG24E05": {"qty": 22.0, "rev": 7081.0, "price": 599.0}, "EETJG24E06": {"qty": 6.0, "rev": 1718.0, "price": 599.0}, "EETJG25B03": {"qty": 2.0, "rev": 1398.0, "price": 999.0}, "EETJG25E1G": {"qty": 1.0, "rev": 0, "price": 699.0}, "EETJG65L37": {"qty": 6.0, "rev": 2226.0, "price": 799.0}, "EETKG25D01": {"qty": 3.0, "rev": 559.0, "price": 799.0}, "EETMG11E01": {"qty": 0, "rev": 0, "price": 799.0}, "EETMG25B51": {"qty": 1.0, "rev": 446.0, "price": 699.0}, "EEVJG23D01": {"qty": 1.0, "rev": 0, "price": 799.0}, "EEVKF37R31": {"qty": 2.0, "rev": 453.0, "price": 499.0}, "EEVKG23B02": {"qty": 0, "rev": 0, "price": 699.0}, "EEVKG23B03": {"qty": 5.0, "rev": 1656.0, "price": 499.0}, "EEVKG24E01": {"qty": 3.0, "rev": 1227.0, "price": 599.0}, "EEVKG25B02": {"qty": 2.0, "rev": 489.0, "price": 699.0}, "EEVKG25B03": {"qty": 9.0, "rev": 2666.0, "price": 699.0}, "EEVKG25B04": {"qty": 2.0, "rev": 0, "price": 699.0}, "EEVKG25D05": {"qty": 6.0, "rev": 1208.0, "price": 899.0}, "EEVKG25E01": {"qty": 39.0, "rev": 9717.0, "price": 499.0}, "EEVKG64S01": {"qty": 2.0, "rev": 0, "price": 599.0}, "EEVWG24E01": {"qty": 23.0, "rev": 9303.0, "price": 899.0}, "EEVWG25B01": {"qty": 5.0, "rev": 1931.0, "price": 999.0}, "EEWHF23M01": {"qty": 2.0, "rev": 671.0, "price": 699.0}, "EEWHF24B06": {"qty": 2.0, "rev": 638.0, "price": 699.0}, "EEWHF24E01": {"qty": 0, "rev": 0, "price": 699.0}, "EEWHF24E02": {"qty": 0, "rev": 0, "price": 799.0}, "EEWHF24E03": {"qty": 6.0, "rev": 2466.0, "price": 899.0}, "EEWHF24M05": {"qty": 3.0, "rev": 780.0, "price": 599.0}, "EEWHF25E01": {"qty": 1.0, "rev": 0, "price": 799.0}, "EEWHF25Q91": {"qty": 3.0, "rev": 970.0, "price": 799.0}, "EEWHF25Q97": {"qty": 2.0, "rev": 473.0, "price": 699.0}, "EEWHF26N51": {"qty": 0, "rev": 0, "price": 799.0}, "EEWHF38M01": {"qty": 0, "rev": 0, "price": 799.0}, "EEWHG23B02": {"qty": 0, "rev": 0, "price": 999.0}, "EEWHG23E01": {"qty": 5.0, "rev": 2059.0, "price": 799.0}, "EEWHG23E03": {"qty": 12.0, "rev": 3760.0, "price": 699.0}, "EEWHG23E52": {"qty": 0, "rev": 0, "price": 699.0}, "EEWHG23R31": {"qty": 1.0, "rev": 521.0, "price": 799.0}, "EEWHG24E01": {"qty": 33.0, "rev": 15076.0, "price": 799.0}, "EEWHG24E02": {"qty": 21.0, "rev": 5085.0, "price": 899.0}, "EEWHG24E03": {"qty": 4.0, "rev": 938.0, "price": 699.0}, "EEWHG24E04": {"qty": 4.0, "rev": 1522.0, "price": 799.0}, "EEWHG24E05": {"qty": 4.0, "rev": 1116.0, "price": 699.0}, "EEWHG24E56": {"qty": 13.0, "rev": 5131.0, "price": 799.0}, "EEWHG25B06": {"qty": 5.0, "rev": 2363.0, "price": 899.0}, "EEWHG25B08": {"qty": 8.0, "rev": 4511.0, "price": 999.0}, "EEWHG25E01": {"qty": 10.0, "rev": 3747.0, "price": 899.0}, "EEWHG25E03": {"qty": 6.0, "rev": 2081.0, "price": 699.0}, "EEWHG25E52": {"qty": 0, "rev": 0, "price": 799.0}, "EEWHG64S02": {"qty": 4.0, "rev": 1886.0, "price": 999.0}, "EEWHG64S03": {"qty": 5.0, "rev": 1171.0, "price": 799.0}, "EEWJF23E01": {"qty": 0, "rev": 0, "price": 699.0}, "EEWJF23M02": {"qty": 0, "rev": 0, "price": 799.0}, "EEWJF24M01": {"qty": 0, "rev": 0, "price": 699.0}, "EEWJG23B01": {"qty": 2.0, "rev": 1268.0, "price": 999.0}, "EEWJG23B02": {"qty": 6.0, "rev": 2777.0, "price": 799.0}, "EEWJG24E01": {"qty": 7.0, "rev": 3021.0, "price": 699.0}, "EEYAG12B01": {"qty": 0, "rev": 0, "price": 699.0}, "EEYAG23B03": {"qty": 3.0, "rev": 1384.0, "price": 699.0}, "EEYAG24B02": {"qty": 1.0, "rev": 0, "price": 699.0}, "EEYAG25B01": {"qty": 9.0, "rev": 3210.0, "price": 699.0}, "EEYAG25B04": {"qty": 13.0, "rev": 3427.0, "price": 599.0}, "EEYAG26B03": {"qty": 5.0, "rev": 1096.0, "price": 699.0}, "EEYAG26B04": {"qty": 2.0, "rev": 917.0, "price": 699.0}, "EEYAG64S01": {"qty": 11.0, "rev": 2006.0, "price": 699.0}, "EEYCG12B1G": {"qty": 0, "rev": 0, "price": 799.0}, "EEYCG23B1G": {"qty": 4.0, "rev": 2312.0, "price": 899.0}, "EEYCG23E01": {"qty": 1.0, "rev": 559.0, "price": 799.0}, "EEYCG24E01": {"qty": 3.0, "rev": 1376.0, "price": 699.0}, "EEYCG24E02": {"qty": 6.0, "rev": 2572.0, "price": 799.0}, "EEYCG25B1G": {"qty": 0, "rev": 0, "price": 799.0}, "EEYCG26E01": {"qty": 9.0, "rev": 3812.0, "price": 799.0}, "EEYCG63S01": {"qty": 7.0, "rev": 2539.0, "price": 799.0}, "EEYPG12E1G": {"qty": 4.0, "rev": 601.0, "price": 799.0}, "EEYPG23E01": {"qty": 13.0, "rev": 4715.0, "price": 699.0}, "EEYPG24E01": {"qty": 19.0, "rev": 2785.0, "price": 599.0}, "EEYPG25B1G": {"qty": 2.0, "rev": 0, "price": 799.0}, "EEYSG12E1G": {"qty": 9.0, "rev": 1824.0, "price": 799.0}, "EEYSG23E01": {"qty": 12.0, "rev": 3577.0, "price": 799.0}, "EEYSG24E04": {"qty": 1.0, "rev": 446.0, "price": 699.0}, "EEYSG25B1G": {"qty": 6.0, "rev": 1155.0, "price": 899.0}, "EEYSG63S01": {"qty": 14.0, "rev": 3633.0, "price": 799.0}, "EEYSG63S02": {"qty": 19.0, "rev": 5404.0, "price": 799.0}, "EEYWF23E01": {"qty": 11.0, "rev": 400.0, "price": 799.0}, "EEYWF23E03": {"qty": 0, "rev": 0, "price": 599.0}, "EEYWF23R31": {"qty": 0, "rev": 0, "price": 599.0}, "EEYWF24E03": {"qty": 0, "rev": 0, "price": 699.0}, "EEYWF25E01": {"qty": 1.0, "rev": 276.0, "price": 599.0}, "EEYWF25E03": {"qty": 7.0, "rev": 1100.0, "price": 799.0}, "EEYWF37E01": {"qty": 0, "rev": 0, "price": 799.0}, "EEYWG11E02": {"qty": 2.0, "rev": 667.0, "price": 699.0}, "EEYWG12E1G": {"qty": 0, "rev": 0, "price": 799.0}, "EEYWG23E01": {"qty": 54.0, "rev": 19375.0, "price": 799.0}, "EEYWG23E02": {"qty": 0, "rev": 0, "price": 599.0}, "EEYWG23R31": {"qty": 0, "rev": 0, "price": 699.0}, "EEYWG24E01": {"qty": 222.0, "rev": 74843.0, "price": 799.0}, "EEYWG24E02": {"qty": 8.0, "rev": 3198.0, "price": 699.0}, "EEYWG24E03": {"qty": 0, "rev": 0, "price": 699.0}, "EEYWG25E01": {"qty": 35.0, "rev": 12713.0, "price": 699.0}, "EEYWG25E02": {"qty": 11.0, "rev": 1898.0, "price": 699.0}, "EEYWG25E03": {"qty": 75.0, "rev": 18638.0, "price": 599.0}, "EEYWG25E1G": {"qty": 35.0, "rev": 12560.0, "price": 899.0}, "EEYWG25E2G": {"qty": 11.0, "rev": 4115.0, "price": 899.0}, "EEYWG25E3G": {"qty": 1.0, "rev": 459.0, "price": 699.0}, "EEYWG26B01": {"qty": 0, "rev": 0, "price": 899.0}, "EEYWG37E01": {"qty": 41.0, "rev": 19908.0, "price": 799.0}}, "zone": {"F001": "여성존", "F002": "여성존", "F003": "여성존", "F004": "여성존", "F005": "여성존", "F006": "여성존", "F007": "여성존", "F008": "여성존", "F009": "여성존", "F010": "여성존", "F011": "남성존", "F012": "남성존", "T001": "여성존", "T002": "여성존", "T003": "남성존", "H001": "여성존", "H002": "여성존", "H003": "여성존", "H004": "여성존", "H005": "남성존", "H009": "남성존", "M001": "윈도우", "M002": "윈도우", "M004": "윈도우", "M005": "여성존", "M006": "여성존", "M008": "여성존", "M009": "여성존", "M010": "여성존", "M011": "남성존", "M012": "남성존", "M013": "남성존"}};const PRESET_Q_XD={"disp": {"F001": [{"bc": "EEYWG24E0150165", "qty": 1}, {"bc": "EEYWG24E0142165", "qty": 1}, {"bc": "EEYWG24E0139170", "qty": 1}, {"bc": "EEYWG25E0159165", "qty": 1}, {"bc": "EEYWG25E0150165", "qty": 1}, {"bc": "EEYWG25E0125165", "qty": 1}, {"bc": "EEYWG24E0251160", "qty": 1}, {"bc": "EEYWG25E0139160", "qty": 1}], "F002": [{"bc": "EEWHG25E0119160", "qty": 2}, {"bc": "EEVKG25B0299160", "qty": 2}, {"bc": "EEWHG24E0139170", "qty": 1}, {"bc": "EEYPG24E0101165", "qty": 2}, {"bc": "EERAG24E0439165", "qty": 2}, {"bc": "EEKWG24E0339165", "qty": 1}, {"bc": "EEASF49N5151FRE", "qty": 1}, {"bc": "EETJG24E0157030", "qty": 1}, {"bc": "EEKWG24E0339160", "qty": 1}], "F003": [{"bc": "EEOWG25B0439165", "qty": 2}, {"bc": "EETHG25E0459170", "qty": 2}, {"bc": "EEVWG24E0159165", "qty": 2}, {"bc": "EEVKG25B0339165", "qty": 2}, {"bc": "EEOWG25B0599165", "qty": 2}, {"bc": "EEJAG24B0239170", "qty": 1}, {"bc": "EEWHG25B0699170", "qty": 3}, {"bc": "EEVWG25B0119165", "qty": 2}], "F004": [{"bc": "EEOWG25E0139165", "qty": 2}, {"bc": "EEYWG23E0139165", "qty": 2}, {"bc": "EERAG23E0219160", "qty": 2}, {"bc": "EETCG24E0619165", "qty": 2}, {"bc": "EECKG25B0439165", "qty": 2}, {"bc": "EETAG24E0259165", "qty": 2}, {"bc": "EEYWG25E0339165", "qty": 2}], "F005": [{"bc": "EEYAG26B0439160", "qty": 2}, {"bc": "EEYPG24E0156165", "qty": 2}, {"bc": "EEOWG25B1032160", "qty": 2}, {"bc": "EETJG24E0256029", "qty": 1}, {"bc": "EEYAG25B0139165", "qty": 2}, {"bc": "EEWHG25E0339160", "qty": 1}, {"bc": "EEVKG25E0130170", "qty": 2}], "F006": [{"bc": "EERAG25E0351160", "qty": 2}, {"bc": "EEOWG24B0130165", "qty": 2}, {"bc": "EEYAG25B0439160", "qty": 2}, {"bc": "EEWJG24E0155165", "qty": 2}, {"bc": "EEYWG25E0330165", "qty": 2}, {"bc": "EEYWG37E0185165", "qty": 1}, {"bc": "EEOMG26B0164165", "qty": 2}], "F007": [{"bc": "EEVKG25D0539160", "qty": 2}, {"bc": "EEOWG25B0330165", "qty": 2}, {"bc": "EETKG25D0139165", "qty": 2}, {"bc": "EEWHG25E0137165", "qty": 2}, {"bc": "EEYWG25E0236160", "qty": 1}, {"bc": "EEOWG25B0239160", "qty": 2}, {"bc": "EETCG24E0636165", "qty": 2}, {"bc": "EEYWG25E0337165", "qty": 2}], "F008": [{"bc": "EEAPE24R0185245", "qty": 1}, {"bc": "EEAPE24R0119245", "qty": 1}, {"bc": "EEAKF49B0156FRE", "qty": 1}, {"bc": "EEACG23E0136FRE", "qty": 1}, {"bc": "EEYWG23E0242160", "qty": 1}, {"bc": "EEKWG24E0215165", "qty": 1}, {"bc": "EEYWG23E0250165", "qty": 1}, {"bc": "EEKWG24E0251170", "qty": 1}, {"bc": "EEYWG23E0230165", "qty": 1}, {"bc": "EEKWG24E0230170", "qty": 1}, {"bc": "EEYWG23E0239165", "qty": 1}, {"bc": "EEKWG24E0239165", "qty": 1}], "F009": [{"bc": "EEYWG23E0139165", "qty": 1}, {"bc": "EERNG23E0195165", "qty": 1}, {"bc": "EEAKF25N5139FRE", "qty": 1}, {"bc": "EEAKF25N5119FRE", "qty": 1}, {"bc": "EETJG24E0236026", "qty": 2}, {"bc": "EETJG23E0457027", "qty": 2}, {"bc": "EETJG24E0157028", "qty": 2}, {"bc": "EETJG24E0139029", "qty": 2}], "F010": [{"bc": "EEOWG24E0236165", "qty": 2}, {"bc": "EEYWG23E0151160", "qty": 2}, {"bc": "EETJG23E0139025", "qty": 1}, {"bc": "EEKWG24B0851165", "qty": 2}, {"bc": "EERAG24B0539165", "qty": 2}, {"bc": "EERNG23E0139165", "qty": 2}, {"bc": "EEWJG24E0139160", "qty": 2}, {"bc": "EEYWG24E0220170", "qty": 1}], "F011": [{"bc": "EEOWG24B0250165", "qty": 2}, {"bc": "EETJG24B5856026", "qty": 2}, {"bc": "EEYCG24E0159160", "qty": 2}, {"bc": "EETHG24E0259170", "qty": 2}, {"bc": "EECKG24E0192660", "qty": 1}, {"bc": "EECKG24E0239170", "qty": 1}, {"bc": "EEOWG25B0959170", "qty": 2}, {"bc": "EECKG24E0259165", "qty": 1}, {"bc": "EERAG23E0192660", "qty": 1}, {"bc": "EEOWG24E0299165", "qty": 1}], "F012": [{"bc": "EEOWG24E0159160", "qty": 2}, {"bc": "EEWHG24E5639160", "qty": 2}, {"bc": "EEYWG24E0251165", "qty": 2}, {"bc": "EETJG24E0256026", "qty": 2}, {"bc": "EEYAG24B0192665", "qty": 1}, {"bc": "EEYAG24B0239160", "qty": 1}, {"bc": "EEOWG26B0351160", "qty": 1}, {"bc": "EETJG23E0755028", "qty": 1}, {"bc": "EECKG25D0339170", "qty": 2}], "F013": [{"bc": "EEVKG25B0662765", "qty": 1}, {"bc": "EERAGF4EE436165", "qty": 1}, {"bc": "EERAG24E0485160", "qty": 2}, {"bc": "EEVKG23B0364170", "qty": 2}, {"bc": "EEOWG24B0237165", "qty": 2}, {"bc": "EEVKG25B0439160", "qty": 1}, {"bc": "EERAG24E0436160", "qty": 1}, {"bc": "EETJG23E0439029", "qty": 1}, {"bc": "EEJKG24B0136165", "qty": 2}, {"bc": "EERAG24E0485165", "qty": 1}, {"bc": "EERAG24E0439160", "qty": 1}], "F014": [{"bc": "EETCG24E0641155", "qty": 1}, {"bc": "EERNG25B0188165", "qty": 2}, {"bc": "EETHG24E0349165", "qty": 2}, {"bc": "EEKWG24B0888160", "qty": 2}, {"bc": "EEJAG24B0339170", "qty": 1}, {"bc": "EERSG23E0140160", "qty": 1}, {"bc": "EEWJG23B0156170", "qty": 1}, {"bc": "EEWJG23B0157165", "qty": 1}, {"bc": "EEKWG24E0388165", "qty": 2}, {"bc": "EEWJG23B0157160", "qty": 1}], "F015": [{"bc": "EEWHG24E0239165", "qty": 1}, {"bc": "EERSG25B0188165", "qty": 2}, {"bc": "EETHG24E0235160", "qty": 2}, {"bc": "EEVKG23E0139165", "qty": 2}, {"bc": "EEOWG24E0135165", "qty": 2}, {"bc": "EETAG24E0235165", "qty": 2}, {"bc": "EEKWG24B0975160", "qty": 1}, {"bc": "EEYWG24E0170160", "qty": 1}], "F016": [{"bc": "EEAKF49M0437FRE", "qty": 1}, {"bc": "EETJG23E0439026", "qty": 1}, {"bc": "EECKG23E0231165", "qty": 1}, {"bc": "EERAG23E0239165", "qty": 1}, {"bc": "EETCG24E0135165", "qty": 1}, {"bc": "EEKWG24E0130160", "qty": 1}, {"bc": "EETAG24E0239170", "qty": 1}, {"bc": "EEYWG25E0139165", "qty": 1}, {"bc": "EEKWG24E0288160", "qty": 1}], "T001": [{"bc": "EEAKF49M0256FRE", "qty": 1}, {"bc": "EEYWG25E0159160", "qty": 1}, {"bc": "EEYWG25E0150160", "qty": 1}, {"bc": "EEYWG25E0251160", "qty": 1}, {"bc": "EEYWG25E0125160", "qty": 1}, {"bc": "EEYWG25E0139160", "qty": 1}, {"bc": "EEYWG24E0150165", "qty": 1}, {"bc": "EEYWG24E0170170", "qty": 1}, {"bc": "EEYWG24E0130160", "qty": 1}, {"bc": "EEVKG25E0139165", "qty": 1}, {"bc": "EEVKG25E0130160", "qty": 1}, {"bc": "EEVKG25E0118160", "qty": 1}, {"bc": "EETHG25E0435165", "qty": 1}, {"bc": "EETHG25E0459165", "qty": 1}], "T002": [{"bc": "EEABF49M0185FRE", "qty": 1}, {"bc": "EETJG24E0139027", "qty": 3}, {"bc": "EETJG24E0155027", "qty": 3}, {"bc": "EETJG24E0157029", "qty": 2}, {"bc": "EERAG24E0118165", "qty": 2}, {"bc": "EERAG24E0151165", "qty": 2}, {"bc": "EERAG24E0139170", "qty": 2}, {"bc": "EEASG24Q1S39FRE", "qty": 1}, {"bc": "EEYPG24E0156160", "qty": 1}, {"bc": "EEACG23E0150FRE", "qty": 1}, {"bc": "EEACF49B5135FRE", "qty": 1}, {"bc": "EEACG23E0188FRE", "qty": 1}, {"bc": "EEACG23E0136FRE", "qty": 1}, {"bc": "EETJG24E0655028", "qty": 2}, {"bc": "EETJG24E0639026", "qty": 2}, {"bc": "EECKG23E0227160", "qty": 1}, {"bc": "EECKG23E0250165", "qty": 1}, {"bc": "EECKG23E0239160", "qty": 1}], "T003": [{"bc": "EEAKF49M0256FRE", "qty": 1}, {"bc": "EEACG23E0188FRE", "qty": 1}, {"bc": "EEACG23E0150FRE", "qty": 1}, {"bc": "EEACG23E0136FRE", "qty": 1}, {"bc": "EEKWG24E0215170", "qty": 1}, {"bc": "EEKWG24E0288165", "qty": 1}, {"bc": "EEKWG24E0239175", "qty": 1}, {"bc": "EEKWG24E0251165", "qty": 1}, {"bc": "EEYWG25E0150160", "qty": 1}, {"bc": "EEYWG24E0139165", "qty": 1}, {"bc": "EEKWG24E0359160", "qty": 1}, {"bc": "EEKWG24E0388160", "qty": 1}, {"bc": "EETJG24E0155028", "qty": 1}], "H001": [{"bc": "EEOWG26B0199165", "qty": 1}, {"bc": "EEYWG24E0130170", "qty": 1}, {"bc": "EEYWG24E0130160", "qty": 1}, {"bc": "EEYCG26E0199165", "qty": 1}, {"bc": "EEVWG24E0139160", "qty": 1}, {"bc": "EEVWG24E0139165", "qty": 1}, {"bc": "EEVKG25E0139160", "qty": 1}, {"bc": "EEWHG25E0139160", "qty": 1}, {"bc": "EEVKG25E0139160", "qty": 1}, {"bc": "EEWHG25E0139165", "qty": 1}, {"bc": "EEYCG24E0250165", "qty": 1}, {"bc": "EEWHG25B0839165", "qty": 1}, {"bc": "EEWHG25B0839160", "qty": 1}, {"bc": "EEOWG24E0259165", "qty": 1}, {"bc": "EEOWG24E0259160", "qty": 1}, {"bc": "EEJAG24B0239160", "qty": 1}, {"bc": "EEJAG24B0239165", "qty": 1}, {"bc": "EEWHG24E0259160", "qty": 1}, {"bc": "EEWHG24E0259165", "qty": 1}, {"bc": "EEHWG25B0139165", "qty": 1}, {"bc": "EEHWG25B0139170", "qty": 1}, {"bc": "EERNG23E0139160", "qty": 1}, {"bc": "EEWHG25E0339165", "qty": 1}, {"bc": "EECKG23E0250170", "qty": 1}], "H002": [{"bc": "EEYWG23E0139160", "qty": 1}, {"bc": "EEYWG23E0136170", "qty": 1}, {"bc": "EEYWG23E0188160", "qty": 1}, {"bc": "EEYWG23E0151165", "qty": 1}, {"bc": "EEYSG23E0126170", "qty": 1}, {"bc": "EEYSG23E0188160", "qty": 1}, {"bc": "EEYSG23E0151170", "qty": 1}, {"bc": "EETJG24E0157027", "qty": 1}, {"bc": "EETJG24E0156810", "qty": 1}, {"bc": "EETJG24E0139026", "qty": 1}, {"bc": "EECKG23E0227160", "qty": 1}, {"bc": "EECKG23E0239160", "qty": 1}, {"bc": "EECKG23E0250165", "qty": 1}, {"bc": "EETJG24E0655026", "qty": 1}, {"bc": "EECKG23E0231160", "qty": 1}], "H003": [{"bc": "EEWHG23E0139165", "qty": 1}, {"bc": "EEWHG24E0515160", "qty": 1}, {"bc": "EEKWG24B0959160", "qty": 1}, {"bc": "EEKWG24B0002670", "qty": 1}, {"bc": "EEYWG25E0350165", "qty": 1}, {"bc": "EEOJG23B0156165", "qty": 1}, {"bc": "EEHWG24E0239160", "qty": 1}, {"bc": "EEHWG24E0239170", "qty": 1}, {"bc": "EEOWG25E0239160", "qty": 1}, {"bc": "EEOWG25E0192665", "qty": 1}, {"bc": "EERAG24E0151170", "qty": 1}, {"bc": "EERAG24E0151165", "qty": 1}, {"bc": "EEWHG23E0139165", "qty": 1}, {"bc": "EERSG23E0151165", "qty": 1}, {"bc": "EERSG23E0151170", "qty": 1}, {"bc": "EEYWG26B0139160", "qty": 1}, {"bc": "EEYWG26B0139170", "qty": 1}, {"bc": "EERAG25E0264165", "qty": 1}, {"bc": "EERAGF5EE264160", "qty": 1}, {"bc": "EETJG25B0355026", "qty": 1}, {"bc": "EEOJG24B0356160", "qty": 1}, {"bc": "EEOJG24B0356165", "qty": 1}, {"bc": "EERAG25E0339160", "qty": 1}, {"bc": "EERAG25E0339160", "qty": 1}, {"bc": "EEVJG23D0156160", "qty": 1}, {"bc": "EEVJG23D0156170", "qty": 1}, {"bc": "EEOWG23B0139165", "qty": 1}, {"bc": "EEOWG23B0139165", "qty": 1}, {"bc": "EEKWG25E0151165", "qty": 1}, {"bc": "EEKWG25E0151160", "qty": 1}, {"bc": "EEOJG24E0139165", "qty": 1}, {"bc": "EETJG24E0556026", "qty": 1}, {"bc": "EEVKG24E0139170", "qty": 1}, {"bc": "EEVKG24E0118170", "qty": 1}, {"bc": "EEWHG24E0559160", "qty": 1}, {"bc": "EEVKG24E0118165", "qty": 1}], "H004": [{"bc": "EEWHG24E0135160", "qty": 1}, {"bc": "EERAG25E0318165", "qty": 1}, {"bc": "EERAG25E0318160", "qty": 1}, {"bc": "EEWHG24E0135165", "qty": 1}, {"bc": "EEOWG25E0119165", "qty": 1}, {"bc": "EEHWG24E0219165", "qty": 1}, {"bc": "EEHWG24E0219165", "qty": 1}, {"bc": "EEOMG25B0119165", "qty": 1}, {"bc": "EEOMG25B0119160", "qty": 1}, {"bc": "EEWHG25E5259160", "qty": 1}, {"bc": "EEWHG25E5259165", "qty": 1}, {"bc": "EERSG25B0119160", "qty": 1}, {"bc": "EERSG25B0119165", "qty": 1}, {"bc": "EERAG25E0259160", "qty": 1}, {"bc": "EERAG25E0259165", "qty": 1}, {"bc": "EETHG25E0159165", "qty": 1}, {"bc": "EETHG25E0159160", "qty": 1}, {"bc": "EERAG25E0117165", "qty": 1}, {"bc": "EERAG25E0151165", "qty": 1}, {"bc": "EERAG25B0151160", "qty": 1}, {"bc": "EERAG25E0117160", "qty": 1}, {"bc": "EEWHG25E0351165", "qty": 1}, {"bc": "EEWHG25E0351155", "qty": 1}, {"bc": "EEOWG25E0259160", "qty": 1}, {"bc": "EEOWG25E0259165", "qty": 1}, {"bc": "EEYAG25B0151160", "qty": 1}, {"bc": "EEYAG25B0151165", "qty": 1}, {"bc": "EETHG25E0164160", "qty": 1}, {"bc": "EETHG25E0164165", "qty": 1}, {"bc": "EEYWG25E0350160", "qty": 1}, {"bc": "EEYWG25E0350160", "qty": 1}], "H005": [{"bc": "EETJG24E0455028", "qty": 1}, {"bc": "EEYWG23E0151160", "qty": 1}, {"bc": "EERAG24E0239160", "qty": 1}, {"bc": "EEWHG24E0515170", "qty": 1}, {"bc": "EETAG24B0336165", "qty": 1}, {"bc": "EERSG23E0159165", "qty": 1}, {"bc": "EERSG23E0159160", "qty": 1}, {"bc": "EETMG25B5164160", "qty": 1}, {"bc": "EETMD25B5084165", "qty": 1}, {"bc": "EERAG24B0618160", "qty": 1}, {"bc": "EERAG24B0618165", "qty": 1}, {"bc": "EERAG24B0659160", "qty": 1}, {"bc": "EERAG24B0659165", "qty": 1}, {"bc": "EETMG25B5117160", "qty": 1}, {"bc": "EETMG25B5117165", "qty": 1}, {"bc": "EEKWG25E0139165", "qty": 1}, {"bc": "EEKWG25E0139160", "qty": 1}, {"bc": "EERAG24B0518165", "qty": 1}, {"bc": "EERAG24B0518170", "qty": 1}, {"bc": "EELAG23B0192660", "qty": 1}, {"bc": "EERAG23E0239165", "qty": 1}, {"bc": "EERAG23E0239165", "qty": 1}, {"bc": "EERNG24B0159160", "qty": 1}, {"bc": "EERNG24B0118160", "qty": 1}, {"bc": "EERNG24B0159165", "qty": 1}, {"bc": "EERNG24B0118165", "qty": 1}, {"bc": "EETAG24E0459165", "qty": 1}, {"bc": "EETAG24E0459160", "qty": 1}, {"bc": "EERAG24E0215165", "qty": 1}, {"bc": "EERAG24E0215160", "qty": 1}, {"bc": "EETAG24E0415160", "qty": 1}, {"bc": "EETAG24E0415165", "qty": 1}, {"bc": "EERAG24E0251160", "qty": 1}, {"bc": "EERAG24E0251165", "qty": 1}, {"bc": "EERAG24E0239165", "qty": 1}, {"bc": "EEVKG25E0118160", "qty": 1}, {"bc": "EEWHG24E0239160", "qty": 1}, {"bc": "EEVKG25E0118165", "qty": 1}, {"bc": "EERNG23E0139165", "qty": 1}], "H006": [{"bc": "EELAG23B0239165", "qty": 1}, {"bc": "EETCG24E0135160", "qty": 1}, {"bc": "EEKWG24E0118170", "qty": 1}, {"bc": "EEKWG24E0118160", "qty": 1}, {"bc": "EEKWG24E0359160", "qty": 1}, {"bc": "EEKWG24E0359165", "qty": 1}, {"bc": "EETCG24E0159160", "qty": 1}, {"bc": "EETCG24E0159160", "qty": 1}, {"bc": "EEKWG24E0318160", "qty": 1}, {"bc": "EEKWG24E0318165", "qty": 1}, {"bc": "EEYWG24E0339170", "qty": 1}, {"bc": "EEYWG24E0339160", "qty": 1}, {"bc": "EEYWG24E0350160", "qty": 1}, {"bc": "EEYWG24E0350165", "qty": 1}, {"bc": "EETJG24E0557026", "qty": 1}, {"bc": "EETJG24E0557027", "qty": 1}, {"bc": "EEKWG25E0215170", "qty": 1}, {"bc": "EEKWG25E0215165", "qty": 1}, {"bc": "EETJG24E0536027", "qty": 1}, {"bc": "EETJG24E0536026", "qty": 1}, {"bc": "EEKWG25E0259170", "qty": 1}, {"bc": "EEKWG25E0259165", "qty": 1}, {"bc": "EEWHG24E0459165", "qty": 1}, {"bc": "EEKWG24B0559170", "qty": 1}, {"bc": "EEKWG24B0559165", "qty": 1}, {"bc": "EEWHG24E5659165", "qty": 1}, {"bc": "EEWHG24E5659160", "qty": 1}, {"bc": "EEKWG24E0139165", "qty": 1}, {"bc": "EELAG23B0239165", "qty": 1}, {"bc": "EETHG25E0135165", "qty": 1}, {"bc": "EEKWG24E0130165", "qty": 1}], "H007": [{"bc": "EEKWG24B5188160", "qty": 1}, {"bc": "EEWHG24E0415165", "qty": 1}, {"bc": "EEKWG24B5188165", "qty": 1}, {"bc": "EEKWG24B5139160", "qty": 1}, {"bc": "EEKWG24B5139165", "qty": 1}, {"bc": "EEWHG24E0415160", "qty": 1}, {"bc": "EEKWG24B5131170", "qty": 1}, {"bc": "EEKWG24B5131165", "qty": 1}, {"bc": "EEKWG25E0152460", "qty": 1}, {"bc": "EEKWG25E0159165", "qty": 1}, {"bc": "EEYAG26B0359165", "qty": 1}, {"bc": "EEYAG26B0359160", "qty": 1}, {"bc": "EERAG23E0226165", "qty": 1}, {"bc": "EERAG23E0226160", "qty": 1}, {"bc": "EETJG23E0256027", "qty": 1}, {"bc": "EETJG23E0256026", "qty": 1}, {"bc": "EEKWG24B5239165", "qty": 1}, {"bc": "EEKWG24B5239160", "qty": 1}, {"bc": "EEKWG24B5216165", "qty": 1}, {"bc": "EEKWG24B5216160", "qty": 1}, {"bc": "EEWHG24E0335165", "qty": 1}, {"bc": "EECKG23E0151160", "qty": 1}, {"bc": "EEWHG24E0359160", "qty": 1}, {"bc": "EEWHG24E0359165", "qty": 1}, {"bc": "EECKG23E0159160", "qty": 1}, {"bc": "EEKWG23E0159160", "qty": 1}], "H008": [{"bc": "EETHG25E0435160", "qty": 1}, {"bc": "EERAG23E0218160", "qty": 1}, {"bc": "EERAG23E0218165", "qty": 1}, {"bc": "EERAG23E0117160", "qty": 1}, {"bc": "EERAG23E0117165", "qty": 1}, {"bc": "EERAG23E0151170", "qty": 1}, {"bc": "EERAG23E0151160", "qty": 1}, {"bc": "EERAG23E0126160", "qty": 1}, {"bc": "EERAG23E0126170", "qty": 1}, {"bc": "EERAG23E0139160", "qty": 1}, {"bc": "EERAG23E0139165", "qty": 1}, {"bc": "EETJG23E0657029", "qty": 1}, {"bc": "EETJG23E0657025", "qty": 1}, {"bc": "EERAG26B0217160", "qty": 1}, {"bc": "EERAG26B0217165", "qty": 1}, {"bc": "EERAG26B0264160", "qty": 1}, {"bc": "EERAG26B0264165", "qty": 1}, {"bc": "EETJG23E0755026", "qty": 1}, {"bc": "EERAG23B0439165", "qty": 1}, {"bc": "EERAG23E0131165", "qty": 1}, {"bc": "EERNG24E5139160", "qty": 1}, {"bc": "EERAG25E0339170", "qty": 1}, {"bc": "EEWHG23E0335160", "qty": 1}, {"bc": "EEYWG24E0130165", "qty": 1}, {"bc": "EERAG25E0339165", "qty": 1}], "H009": [{"bc": "EEOWG25B1231165", "qty": 1}, {"bc": "EEOWG25B1139160", "qty": 1}, {"bc": "EEOWG25B1118160", "qty": 1}, {"bc": "EEOWG25Q9179165", "qty": 1}, {"bc": "EEOWG25Q9119160", "qty": 1}, {"bc": "EEOWG25B1351165", "qty": 1}, {"bc": "EETJG24E0416026", "qty": 1}, {"bc": "EETJF23E0555160", "qty": 1}, {"bc": "EEYWG23E0188165", "qty": 1}, {"bc": "EEYWG23E0242160", "qty": 1}, {"bc": "EEYWG23E0239160", "qty": 1}, {"bc": "EEYWG24E0150165", "qty": 1}, {"bc": "EEYWG24E0139170", "qty": 1}, {"bc": "EETJG23E0655026", "qty": 1}, {"bc": "EERNG23E0199160", "qty": 1}, {"bc": "EEWHF49E0159165", "qty": 1}, {"bc": "EERNG24E5115160", "qty": 1}, {"bc": "EETHG12E0315165", "qty": 1}, {"bc": "EEYWG24E0170165", "qty": 1}, {"bc": "EERNG24E5139160", "qty": 1}], "M001": [{"bc": "EETJG24E0655028", "qty": 1}, {"bc": "EETJG24E0655026", "qty": 1}, {"bc": "EEYWG23E0126165", "qty": 1}, {"bc": "EEYWG25E0330165", "qty": 1}, {"bc": "EEACG23E0159FRE", "qty": 1}], "M002": [{"bc": "EEOWG26B0199160", "qty": 1}, {"bc": "EEYCG26E0199160", "qty": 1}], "M003": [{"bc": "EEAKF49M0337FRE", "qty": 1}, {"bc": "EEASG23D0159FRE", "qty": 1}, {"bc": "EETAG24E0239165", "qty": 1}, {"bc": "EEYWG24E0139165", "qty": 1}], "M004": [{"bc": "EEAKF49M0337FRE", "qty": 1}, {"bc": "EETJG24E0155025", "qty": 1}, {"bc": "EEVKG25E0130170", "qty": 1}], "M005": [{"bc": "EEAKF25N5139FRE", "qty": 1}, {"bc": "EEWHG24E0139170", "qty": 1}, {"bc": "EEYPGF4EE101160", "qty": 1}], "M006": [{"bc": "EEAKG25E0185FRE", "qty": 1}, {"bc": "EEWHG24E0239160", "qty": 1}, {"bc": "EEYWG25E0139160", "qty": 1}, {"bc": "EEVKG25E0139160", "qty": 1}], "M007": [{"bc": "EEOWG24E0236165", "qty": 1}], "M008": [{"bc": "EEYWG24E0170165", "qty": 1}, {"bc": "EERAG24E0439160", "qty": 1}, {"bc": "EETCG24E0641155", "qty": 1}]}, "sales": {"EEABG23B01": {"qty": 0, "rev": 0, "price": 499.0}, "EEABG23B51": {"qty": 0, "rev": 0, "price": 199.0}, "EEACG23E01": {"qty": 0, "rev": 0, "price": 299.0}, "EEACG25D01": {"qty": 0.0, "rev": 0.0, "price": 399.0}, "EEAKG23B01": {"qty": 0, "rev": 0, "price": 999.0}, "EEAKG25B01": {"qty": 0, "rev": 0, "price": 1299.0}, "EEAKG25E01": {"qty": 0, "rev": 0, "price": 1599.0}, "EEASG23D01": {"qty": 0, "rev": 0, "price": 399.0}, "EEASG24Q1S": {"qty": 0, "rev": 0, "price": 299.0}, "EEBWG23B01": {"qty": 1.0, "rev": 503.0, "price": 799.0}, "EECKG23B03": {"qty": 0, "rev": 0, "price": 799.0}, "EECKG23B04": {"qty": 0, "rev": 0, "price": 899.0}, "EEJAG23E01": {"qty": 2.0, "rev": 1299.0, "price": 1299.0}, "EEJAG24B04": {"qty": 2.0, "rev": 1839.0, "price": 1599.0}, "EECKG23R31": {"qty": 0.0, "rev": 0.0, "price": 999.0}, "EECKG23R33": {"qty": 0, "rev": 0, "price": 899.0}, "EEJJG23D03": {"qty": 1.0, "rev": 480.0, "price": 1599.0}, "EECKG25B04": {"qty": 0, "rev": 0, "price": 599.0}, "EEKWG23D02": {"qty": 1.0, "rev": 489.0, "price": 699.0}, "EELAG23E01": {"qty": 2.0, "rev": 681.0, "price": 699.0}, "EEHWG25B01": {"qty": 0, "rev": 0, "price": 499.0}, "EEJAG23B03": {"qty": 0, "rev": 0, "price": 1599.0}, "EEJAG23B04": {"qty": 0, "rev": 0, "price": 1599.0}, "EEJAG23B51": {"qty": 0, "rev": 0, "price": 1599.0}, "EERAG25B1G": {"qty": 2.0, "rev": 299.0, "price": 499.0}, "EEJAG23E02": {"qty": 0, "rev": 0, "price": 1599.0}, "EEJAG23R01": {"qty": 0, "rev": 0, "price": 1999.0}, "EEJAG24B01": {"qty": 0, "rev": 0, "price": 1599.0}, "EEJAG24B02": {"qty": 0, "rev": 0, "price": 1599.0}, "EERAG25E1G": {"qty": 1.0, "rev": 120.0, "price": 399.0}, "EERSG24B01": {"qty": 1.0, "rev": 279.0, "price": 399.0}, "EEJDG23R31": {"qty": 0, "rev": 0, "price": 1599.0}, "EEJJG23B01": {"qty": 0.0, "rev": 0.0, "price": 899.0}, "EETCG23E02": {"qty": 1.0, "rev": 300.0, "price": 999.0}, "EEWHG23B02": {"qty": 1.0, "rev": 300.0, "price": 999.0}, "EEJLG23B51": {"qty": 0, "rev": 0, "price": 1599.0}, "EEJWG23R31": {"qty": 0, "rev": 0, "price": 3999.0}, "EEYPG23E02": {"qty": 1.0, "rev": 240.0, "price": 799.0}, "EEYWG25E2G": {"qty": 1.0, "rev": 270.0, "price": 899.0}, "EEKWG23E2G": {"qty": 0, "rev": 0, "price": 699.0}, "EEKWG24B05": {"qty": 0, "rev": 0, "price": 699.0}, "EECKG23E01": {"qty": 1.0, "rev": 449.0, "price": 699.0}, "EECKG23E02": {"qty": 6.0, "rev": 2515.0, "price": 699.0}, "EECKG24E02": {"qty": 4.0, "rev": 1464.0, "price": 699.0}, "EECKG25D03": {"qty": 1.0, "rev": 764.0, "price": 899.0}, "EEHWG24E02": {"qty": 1.0, "rev": 419.0, "price": 599.0}, "EEJAG24B03": {"qty": 2.0, "rev": 1220.0, "price": 1299.0}, "EEJKG24B01": {"qty": 1.0, "rev": 480.0, "price": 1599.0}, "EEKWG25E01": {"qty": 0, "rev": 0, "price": 599.0}, "EEKWG23E01": {"qty": 5.0, "rev": 1319.0, "price": 499.0}, "EELAG23B02": {"qty": 0, "rev": 0, "price": 599.0}, "EEKWG24B08": {"qty": 2.0, "rev": 799.0, "price": 799.0}, "EELAG23E03": {"qty": 0, "rev": 0, "price": 599.0}, "EEKWG24B09": {"qty": 1.0, "rev": 240.0, "price": 799.0}, "EEOJG24B03": {"qty": 0, "rev": 0, "price": 999.0}, "EEKWG24B51": {"qty": 2.0, "rev": 1019.0, "price": 799.0}, "EEKWG24B52": {"qty": 2.0, "rev": 801.0, "price": 599.0}, "EEKWG24E01": {"qty": 6.0, "rev": 2301.0, "price": 699.0}, "EEKWG24E02": {"qty": 7.0, "rev": 2411.0, "price": 699.0}, "EEOWG24B01": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOWG24B02": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOWG24E01": {"qty": 0, "rev": 0, "price": 1299.0}, "EEKWG24E03": {"qty": 2.0, "rev": 804.0, "price": 699.0}, "EEKWG25E02": {"qty": 2.0, "rev": 674.0, "price": 699.0}, "EEOWG25B03": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOWG25B04": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOWG25B05": {"qty": 0, "rev": 0, "price": 1599.0}, "EEOJG23B01": {"qty": 1.0, "rev": 831.0, "price": 1299.0}, "EEOWG25B10": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOWG25B11": {"qty": 0, "rev": 0, "price": 999.0}, "EEOWG25B12": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOWG25B13": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOJG24E01": {"qty": 3.0, "rev": 2798.0, "price": 1599.0}, "EEOWG25E02": {"qty": 0, "rev": 0, "price": 999.0}, "EEOWG25Q91": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOWG26B01": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOWG26B03": {"qty": 0, "rev": 0, "price": 1299.0}, "EEOMG25B01": {"qty": 1.0, "rev": 559.0, "price": 799.0}, "EERAG23D03": {"qty": 0, "rev": 0, "price": 599.0}, "EEOMG26B01": {"qty": 1.0, "rev": 300.0, "price": 999.0}, "EERAG23E02": {"qty": 0, "rev": 0, "price": 399.0}, "EEOWG23B01": {"qty": 1.0, "rev": 1069.0, "price": 1599.0}, "EERAG24B06": {"qty": 0, "rev": 0, "price": 499.0}, "EEOWG24E02": {"qty": 3.0, "rev": 2086.0, "price": 1299.0}, "EERAG24E02": {"qty": 0, "rev": 0, "price": 499.0}, "EERAG24E03": {"qty": 0, "rev": 0, "price": 599.0}, "EEOWG25B02": {"qty": 1.0, "rev": 831.0, "price": 1299.0}, "EEOWG25B09": {"qty": 1.0, "rev": 390.0, "price": 1299.0}, "EEOWG25E01": {"qty": 1.0, "rev": 300.0, "price": 999.0}, "EERAG23B04": {"qty": 2.0, "rev": 765.0, "price": 599.0}, "EERAG23E01": {"qty": 1.0, "rev": 254.0, "price": 399.0}, "EERAG24B05": {"qty": 1.0, "rev": 349.0, "price": 499.0}, "EERAG26B02": {"qty": 0, "rev": 0, "price": 399.0}, "EERAG26B03": {"qty": 0, "rev": 0, "price": 499.0}, "EERAG24E01": {"qty": 1.0, "rev": 279.0, "price": 399.0}, "EERAG24E04": {"qty": 4.0, "rev": 998.0, "price": 499.0}, "EERAG25E01": {"qty": 1.0, "rev": 319.0, "price": 499.0}, "EERNG25B01": {"qty": 0, "rev": 0, "price": 399.0}, "EERAG25E02": {"qty": 2.0, "rev": 509.0, "price": 399.0}, "EERAG25E03": {"qty": 2.0, "rev": 634.0, "price": 499.0}, "EERNG23E01": {"qty": 4.0, "rev": 584.0, "price": 299.0}, "EERNG24B01": {"qty": 1.0, "rev": 150.0, "price": 499.0}, "EERNG24E51": {"qty": 4.0, "rev": 239.0, "price": 199.0}, "EERSG23E01": {"qty": 1.0, "rev": 279.0, "price": 399.0}, "EETCG23E01": {"qty": 0, "rev": 0, "price": 799.0}, "EERSG25B01": {"qty": 2.0, "rev": 668.0, "price": 499.0}, "EETAG24B03": {"qty": 2.0, "rev": 1084.0, "price": 899.0}, "EETAG24E02": {"qty": 4.0, "rev": 2242.0, "price": 899.0}, "EETAG24E04": {"qty": 1.0, "rev": 559.0, "price": 799.0}, "EETHG24E03": {"qty": 0, "rev": 0, "price": 699.0}, "EETCG24E01": {"qty": 3.0, "rev": 909.0, "price": 699.0}, "EETHG25E04": {"qty": 0, "rev": 0, "price": 699.0}, "EETJG23B05": {"qty": 0, "rev": 0, "price": 899.0}, "EETCG24E06": {"qty": 3.0, "rev": 1639.0, "price": 1299.0}, "EETHG24E02": {"qty": 1.0, "rev": 386.0, "price": 599.0}, "EETHG25E01": {"qty": 1.0, "rev": 454.0, "price": 699.0}, "EETJG23B1G": {"qty": 1.0, "rev": 270.0, "price": 899.0}, "EETJG23E01": {"qty": 2.0, "rev": 606.0, "price": 699.0}, "EETJG23E02": {"qty": 1.0, "rev": 240.0, "price": 799.0}, "EETJG24B57": {"qty": 0, "rev": 0, "price": 899.0}, "EETJG24B58": {"qty": 0, "rev": 0, "price": 899.0}, "EETJG23E04": {"qty": 3.0, "rev": 1119.0, "price": 899.0}, "EETJG23E06": {"qty": 2.0, "rev": 959.0, "price": 799.0}, "EETJG23E07": {"qty": 1.0, "rev": 270.0, "price": 899.0}, "EETJG24E01": {"qty": 7.0, "rev": 3076.0, "price": 799.0}, "EETJG24E02": {"qty": 1.0, "rev": 444.0, "price": 699.0}, "EETJG24E04": {"qty": 1.0, "rev": 210.0, "price": 699.0}, "EETKG25D01": {"qty": 0, "rev": 0, "price": 799.0}, "EETMG24E51": {"qty": 0.0, "rev": 0.0, "price": 699.0}, "EETJG24E05": {"qty": 2.0, "rev": 817.0, "price": 599.0}, "EEVJG23D01": {"qty": 0, "rev": 0, "price": 799.0}, "EEVKG23B02": {"qty": 0, "rev": 0, "price": 699.0}, "EEVKG23B03": {"qty": 0.0, "rev": 0.0, "price": 499.0}, "EETJG24E06": {"qty": 1.0, "rev": 377.0, "price": 599.0}, "EETJG25B03": {"qty": 1.0, "rev": 635.0, "price": 999.0}, "EEVKG25B02": {"qty": 0, "rev": 0, "price": 699.0}, "EEVKG25B03": {"qty": 0, "rev": 0, "price": 699.0}, "EEVKG25B04": {"qty": 0, "rev": 0, "price": 699.0}, "EETMG25B51": {"qty": 1.0, "rev": 210.0, "price": 699.0}, "EEVKG23E01": {"qty": 1.0, "rev": 419.0, "price": 599.0}, "EEVKG24E01": {"qty": 2.0, "rev": 584.0, "price": 599.0}, "EEVWG25B01": {"qty": 0, "rev": 0, "price": 999.0}, "EEVKG25D05": {"qty": 1.0, "rev": 270.0, "price": 899.0}, "EEWHG23E01": {"qty": 0, "rev": 0, "price": 799.0}, "EEVKG25E01": {"qty": 6.0, "rev": 1201.0, "price": 499.0}, "EEWHG23E52": {"qty": 0, "rev": 0, "price": 699.0}, "EEWHG23R31": {"qty": 0, "rev": 0, "price": 799.0}, "EEVWG24E01": {"qty": 1.0, "rev": 270.0, "price": 899.0}, "EEWHG23E03": {"qty": 1.0, "rev": 440.0, "price": 699.0}, "EEWHG24E01": {"qty": 2.0, "rev": 749.0, "price": 799.0}, "EEWHG24E02": {"qty": 1.0, "rev": 569.0, "price": 899.0}, "EEWHG24E03": {"qty": 3.0, "rev": 1133.0, "price": 699.0}, "EEWHG24E04": {"qty": 1.0, "rev": 509.0, "price": 799.0}, "EEWHG24E05": {"qty": 2.0, "rev": 914.0, "price": 699.0}, "EEWHG25B08": {"qty": 0, "rev": 0, "price": 999.0}, "EEWHG24E56": {"qty": 2.0, "rev": 919.0, "price": 799.0}, "EEWHG25E03": {"qty": 0, "rev": 0, "price": 699.0}, "EEWHG25E52": {"qty": 0, "rev": 0, "price": 799.0}, "EEWHG25B06": {"qty": 1.0, "rev": 270.0, "price": 899.0}, "EEWJG23B02": {"qty": 0.0, "rev": 0.0, "price": 799.0}, "EEWHG25E01": {"qty": 1.0, "rev": 270.0, "price": 899.0}, "EEYAG24B02": {"qty": 0, "rev": 0, "price": 699.0}, "EEWJG23B01": {"qty": 1.0, "rev": 670.0, "price": 999.0}, "EEYAG25B04": {"qty": 0, "rev": 0, "price": 599.0}, "EEYAG26B03": {"qty": 0, "rev": 0, "price": 699.0}, "EEYAG26B04": {"qty": 0, "rev": 0, "price": 699.0}, "EEYCG23E01": {"qty": 0, "rev": 0, "price": 799.0}, "EEYCG24E01": {"qty": 0, "rev": 0, "price": 699.0}, "EEWJG24E01": {"qty": 2.0, "rev": 664.0, "price": 699.0}, "EEYAG25B01": {"qty": 4.0, "rev": 2120.0, "price": 699.0}, "EEYPG23E01": {"qty": 0, "rev": 0, "price": 699.0}, "EEYCG24E02": {"qty": 1.0, "rev": 509.0, "price": 799.0}, "EEYCG26E01": {"qty": 1.0, "rev": 623.0, "price": 799.0}, "EEYPG24E01": {"qty": 1.0, "rev": 389.0, "price": 599.0}, "EEYSG23E01": {"qty": 1.0, "rev": 459.0, "price": 799.0}, "EEYWG23E01": {"qty": 13.0, "rev": 4514.0, "price": 799.0}, "EEYWG23E51": {"qty": 0, "rev": 0, "price": 599.0}, "EEYWG23E02": {"qty": 7.0, "rev": 2616.0, "price": 599.0}, "EEYWG24E01": {"qty": 24.0, "rev": 10741.0, "price": 799.0}, "EEYWG24E02": {"qty": 4.0, "rev": 1398.0, "price": 699.0}, "EEYWG24E03": {"qty": 1.0, "rev": 459.0, "price": 699.0}, "EEYWG25E01": {"qty": 2.0, "rev": 699.0, "price": 699.0}, "EEYWG25E02": {"qty": 1.0, "rev": 559.0, "price": 699.0}, "EEYWG25E03": {"qty": 5.0, "rev": 1907.0, "price": 599.0}, "EEYWG26B01": {"qty": 1.0, "rev": 270.0, "price": 899.0}}, "zone": {}};const PRESET_B_PINS=[{"id": 1, "type": "face", "code": "F001", "name": "여성존 FACE", "x": 82.52669039145908, "y": 11.88679245283019}, {"id": 2, "type": "face", "code": "F002", "name": "여성존 FACE", "x": 77.90035587188612, "y": 11.69811320754717}, {"id": 3, "type": "face", "code": "F003", "name": "여성존 FACE", "x": 72.98932384341637, "y": 12.264150943396226}, {"id": 4, "type": "face", "code": "F004", "name": "여성존 FACE", "x": 68.29181494661923, "y": 11.88679245283019}, {"id": 5, "type": "face", "code": "F005", "name": "여성존 FACE", "x": 82.31316725978648, "y": 80.18867924528303}, {"id": 6, "type": "face", "code": "F006", "name": "여성존 FACE", "x": 77.90035587188612, "y": 79.43396226415095}, {"id": 7, "type": "face", "code": "F007", "name": "여성존 FACE", "x": 73.41637010676156, "y": 80.75471698113208}, {"id": 8, "type": "face", "code": "F008", "name": "여성존 FACE", "x": 68.43416370106762, "y": 80.37735849056604}, {"id": 9, "type": "face", "code": "F009", "name": "여성존 FACE", "x": 59.6797153024911, "y": 26.41509433962264}, {"id": 10, "type": "face", "code": "F010", "name": "여성존 FACE", "x": 54.056939501779354, "y": 26.60377358490566}, {"id": 11, "type": "face", "code": "F011", "name": "남성존 FACE", "x": 59.7508896797153, "y": 67.35849056603773}, {"id": 12, "type": "face", "code": "F012", "name": "남성존 FACE", "x": 53.77224199288256, "y": 67.54716981132076}, {"id": 13, "type": "hang", "code": "H001", "name": "여성존 연출 HANGER", "x": 84.23487544483986, "y": 31.132075471698112}, {"id": 14, "type": "hang", "code": "H002", "name": "여성존 HANGER", "x": 73.62989323843416, "y": 27.547169811320753}, {"id": 15, "type": "hang", "code": "H003", "name": "여성존 HANGER", "x": 69.644128113879, "y": 31.69811320754717}, {"id": 16, "type": "hang", "code": "H004", "name": "여성존 HANGER", "x": 69.9288256227758, "y": 58.867924528301884}, {"id": 17, "type": "hang", "code": "H005", "name": "남성존 HANGER", "x": 53.91459074733096, "y": 46.22641509433962}, {"id": 18, "type": "mnn", "code": "M001", "name": "윈도우 여성 MQ", "x": 89.35943060498221, "y": 13.962264150943396}, {"id": 19, "type": "mnn", "code": "M002", "name": "윈도우 여성 MQ", "x": 88.07829181494662, "y": 22.07547169811321}, {"id": 20, "type": "mnn", "code": "M004", "name": "윈도우 남성 MQ", "x": 89.35943060498221, "y": 34.90566037735849}, {"id": 21, "type": "mnn", "code": "M005", "name": "여성존 MQ", "x": 76.12099644128114, "y": 33.20754716981132}, {"id": 22, "type": "mnn", "code": "M006", "name": "여성존 MQ", "x": 78.54092526690391, "y": 38.113207547169814}, {"id": 23, "type": "mnn", "code": "M008", "name": "여성존 MQ", "x": 75.76512455516014, "y": 64.33962264150944}, {"id": 24, "type": "mnn", "code": "M009", "name": "여성존 MQ", "x": 78.25622775800711, "y": 66.79245283018868}, {"id": 25, "type": "mnn", "code": "M010", "name": "여성존 MQ", "x": 63.807829181494654, "y": 29.62264150943396}, {"id": 26, "type": "mnn", "code": "M012", "name": "남성존 MQ", "x": 56.19217081850534, "y": 47.924528301886795}, {"id": 27, "type": "mnn", "code": "M011", "name": "남성존 MQ", "x": 58.469750889679716, "y": 53.58490566037736}, {"id": 28, "type": "mnn", "code": "M013", "name": "남성존 MQ", "x": 50.49822064056939, "y": 27.358490566037734}, {"id": 29, "type": "tbl", "code": "T001", "name": "여성존", "x": 73.71428571428571, "y": 35.03787878787879}, {"id": 30, "type": "tbl", "code": "T002", "name": "여성존", "x": 73.28571428571429, "y": 62.689393939393945}, {"id": 31, "type": "tbl", "code": "T003", "name": "남성존", "x": 57.785714285714285, "y": 46.21212121212121}];const PRESET_Q_PINS=[{"id": 1, "type": "face", "code": "F001", "name": "ITEM FACE", "x": 15.63517915309446, "y": 84.09425625920471}, {"id": 2, "type": "face", "code": "F002", "name": "", "x": 22.068403908794785, "y": 83.79970544918999}, {"id": 3, "type": "face", "code": "F003", "name": "", "x": 27.11726384364821, "y": 83.65243004418262}, {"id": 4, "type": "face", "code": "F004", "name": "", "x": 32.57328990228013, "y": 83.65243004418262}, {"id": 5, "type": "face", "code": "F005", "name": "", "x": 20.928338762214985, "y": 28.865979381443296}, {"id": 6, "type": "face", "code": "F006", "name": "", "x": 27.035830618892508, "y": 28.865979381443296}, {"id": 7, "type": "face", "code": "F007", "name": "", "x": 32.65472312703583, "y": 28.718703976435933}, {"id": 8, "type": "face", "code": "F008", "name": "ITEM FACE", "x": 43.241042345276874, "y": 34.02061855670103}, {"id": 9, "type": "face", "code": "F009", "name": "ITEM FACE", "x": 47.96416938110749, "y": 33.726067746686304}, {"id": 10, "type": "face", "code": "F010", "name": "", "x": 58.46905537459284, "y": 83.94698085419735}, {"id": 11, "type": "face", "code": "F011", "name": "", "x": 64.25081433224756, "y": 83.79970544918999}, {"id": 12, "type": "face", "code": "F012", "name": "", "x": 70.76547231270358, "y": 83.79970544918999}, {"id": 13, "type": "face", "code": "F013", "name": "", "x": 78.66449511400651, "y": 67.8939617083947}, {"id": 14, "type": "face", "code": "F014", "name": "", "x": 78.58306188925081, "y": 57.14285714285714}, {"id": 15, "type": "face", "code": "F015", "name": "", "x": 78.58306188925081, "y": 45.9499263622975}, {"id": 16, "type": "face", "code": "F016", "name": "", "x": 61.72638436482085, "y": 37.99705449189985}, {"id": 17, "type": "hang", "code": "H001", "name": "", "x": 21.986970684039086, "y": 61.26656848306333}, {"id": 18, "type": "hang", "code": "H002", "name": "", "x": 34.039087947882734, "y": 42.70986745213549}, {"id": 19, "type": "hang", "code": "H003", "name": "", "x": 33.387622149837135, "y": 68.77761413843888}, {"id": 20, "type": "hang", "code": "H004", "name": "", "x": 33.14332247557003, "y": 64.50662739322533}, {"id": 21, "type": "hang", "code": "H005", "name": "", "x": 43.97394136807817, "y": 55.52282768777614}, {"id": 22, "type": "hang", "code": "H006", "name": "", "x": 43.648208469055376, "y": 50.8100147275405}, {"id": 23, "type": "hang", "code": "H007", "name": "", "x": 61.48208469055375, "y": 59.499263622974965}, {"id": 24, "type": "hang", "code": "H008", "name": "", "x": 57.899022801302934, "y": 35.640648011782034}, {"id": 25, "type": "hang", "code": "H009", "name": "", "x": 48.9413680781759, "y": 72.90132547864506}, {"id": 26, "type": "mnn", "code": "M001", "name": "", "x": 18.566775244299674, "y": 66.12665684830633}, {"id": 27, "type": "mnn", "code": "M002", "name": "", "x": 16.286644951140065, "y": 68.48306332842415}, {"id": 28, "type": "mnn", "code": "M003", "name": "", "x": 11.237785016286644, "y": 79.23416789396171}, {"id": 29, "type": "mnn", "code": "M004", "name": "", "x": 23.615635179153095, "y": 43.29896907216495}, {"id": 30, "type": "mnn", "code": "M005", "name": "", "x": 29.723127035830622, "y": 66.27393225331369}, {"id": 31, "type": "mnn", "code": "M006", "name": "", "x": 40.06514657980456, "y": 33.87334315169367}, {"id": 32, "type": "mnn", "code": "M007", "name": "", "x": 58.46905537459284, "y": 64.94845360824742}, {"id": 33, "type": "mnn", "code": "M008", "name": "", "x": 56.188925081433226, "y": 68.33578792341679}, {"id": 34, "type": "tbl", "code": "T001", "name": "", "x": 17.91530944625407, "y": 60.08836524300442}, {"id": 35, "type": "tbl", "code": "T002", "name": "", "x": 28.013029315960914, "y": 42.857142857142854}, {"id": 36, "type": "tbl", "code": "T003", "name": "", "x": 57.00325732899023, "y": 59.499263622974965}];
+function loadStore(prefix,pinKey){
+  try{
+    const sx=lsGet(prefix+'_xl');
+    const xd=sx?JSON.parse(sx):(prefix==='bister'?PRESET_B_XD:PRESET_Q_XD);
+    const px=lsGet(pinKey);
+    const pins=px?JSON.parse(px):(prefix==='bister'?PRESET_B_PINS:PRESET_Q_PINS);
+    if(!xd||!pins)return null;
+    let tR=0,tQ=0,tD=0;
+    const seenSn=new Set(),catSnSeen={},catRev={},btmStyles={},pinRevMap={},skuSet=new Set();
+    pins.forEach(p=>{
+      const items=xd.disp[p.code];if(!items)return;
+      let pinTot=0;
+      items.forEach(({bc,qty})=>{
+        if(!bc||bc.length<10)return;
+        const sn=bc.slice(0,10),sc=bc.slice(2,4);
+        if(sn[9]==='G')return;
+        const sd=xd.sales[sn]||{qty:0,rev:0};
+        const cat=(SM[sc]?.c)||'기타';
+        if(!seenSn.has(sn)){seenSn.add(sn);tR+=sd.rev||0;tQ+=sd.qty||0;}
+        tD+=qty;skuSet.add(bc);
+        if(!catSnSeen[cat])catSnSeen[cat]=new Set();
+        if(!catSnSeen[cat].has(sn)){catSnSeen[cat].add(sn);if(!catRev[cat])catRev[cat]=0;catRev[cat]+=sd.rev||0;}
+        if(BOTTOMS[sc]){
+          if(!btmStyles[sn])btmStyles[sn]={sn,dQty:0,sQty:sd.qty||0,rev:sd.rev||0,pins:[],bcList:[]};
+          btmStyles[sn].dQty+=qty;
+          if(!btmStyles[sn].pins.includes(p.code))btmStyles[sn].pins.push(p.code);
+          if(!btmStyles[sn].bcList.includes(bc))btmStyles[sn].bcList.push(bc);
+        }
+        pinTot+=sd.rev||0;
+      });
+      pinRevMap[p.code]={rev:pinTot,code:p.code,name:p.name||''};
+    });
+    const btmArr=Object.values(btmStyles);
+    const btmDqty=btmArr.reduce((a,v)=>a+v.dQty,0);
+    const btmSqty=btmArr.reduce((a,v)=>a+v.sQty,0);
+    const btmTurn=btmDqty>0?(btmSqty/btmDqty).toFixed(2):'-';
+    const btmRev=btmArr.reduce((a,v)=>a+v.rev,0);
+    const btmZero=btmArr.filter(s=>s.sQty===0).length;
+    const btmPct=tR>0?Math.round(btmRev/tR*100):0;
+    const zeroPct=btmArr.length>0?Math.round(btmZero/btmArr.length*100):0;
+    const eff=tD>0?(tR/tD).toFixed(1):'-';
+    const topPin=Object.values(pinRevMap).filter(v=>v.rev>0).sort((a,b)=>b.rev-a.rev)[0];
+    const date=lsGet(prefix+'_xl_date');
+    const p=prefix==='bister'?'b':'c';
+
+    // 날짜
+    const del=document.getElementById(p+'-date');
+    if(date){del.textContent=I18N[curLang].data_upd+date;del.className='ddate ok';}else{del.textContent=I18N[curLang].data_none;}
+
+    // KPI
+    document.getElementById(p+'-rev').textContent=wan(tR);
+    document.getElementById(p+'-rev-krw').textContent=(curLang==='ko'?'약 ':'')+krw(tR);
+    const btmSkuCnt=new Set(btmArr.flatMap(s=>s.bcList||[])).size;
+    document.getElementById(p+'-btm').textContent=btmArr.length+I18N[curLang].btm_unit;
+    document.getElementById(p+'-btm-sub').textContent=(btmSkuCnt?'SKU '+btmSkuCnt+'개 · ':'')+I18N[curLang].unsold+btmZero+I18N[curLang].unsold_unit;
+    document.getElementById(p+'-turn').textContent=btmTurn+'회';
+    document.getElementById(p+'-turn-sub').textContent=I18N[curLang].turn_sub_tpl(btmSqty,btmDqty);
+
+    // 카테고리 바
+    const cats=Object.entries(catRev).sort((a,b)=>b[1]-a[1]);
+    document.getElementById(p+'-catbar').innerHTML=cats.map(([cat,rev])=>{
+      const w=tR>0?Math.max(rev/tR*100,1):0;
+      const catN2=CAT_NAME_MAP[curLang][cat]||cat;return`<div style="flex:${w};background:${CAT_COL[cat]||'#aaa'};height:8px" title="${catN2} ${wan(rev)}"></div>`;
+    }).join('');
+    document.getElementById(p+'-catleg').innerHTML=cats.map(([cat,rev])=>{
+      const pct=tR>0?Math.round(rev/tR*100):0;
+      const catN=CAT_NAME_MAP[curLang][cat]||cat;return`<div class="cat-li"><div class="cat-dot" style="background:${CAT_COL[cat]||'#aaa'}"></div>${catN} ${pct}%</div>`;
+    }).join('');
+
+    // 스탯
+    document.getElementById(p+'-pins').textContent=pins.length+I18N[curLang].pin_unit;
+    document.getElementById(p+'-sku').textContent=seenSn.size+I18N[curLang].sku_unit+skuSet.size+I18N[curLang].sku_unit2;
+    document.getElementById(p+'-qty').textContent=tQ+I18N[curLang].qty_unit;
+    document.getElementById(p+'-dqty').textContent=tD+I18N[curLang].qty_unit;
+    document.getElementById(p+'-btm-rev').textContent=I18N[curLang].btmrev_tpl(wan(btmRev),btmPct);
+    const zel=document.getElementById(p+'-zero');
+    zel.textContent=I18N[curLang].zero_tpl(btmZero,zeroPct);
+    zel.style.color=zeroPct>=20?'var(--danger)':zeroPct>=10?'var(--warn)':'var(--ok)';
+    document.getElementById(p+'-eff').textContent=eff>0?eff+I18N[curLang].eff_unit:'—';
+    document.getElementById(p+'-top').textContent=topPin?I18N[curLang].top_tpl(topPin.code,topPin.name,wan(topPin.rev)):'—';
+
+    return{tR,btmTurn:parseFloat(btmTurn)||0,btmRev,btmPct,btmZero,zeroPct,eff:parseFloat(eff)||0};
+  }catch(e){console.error(e);return null;}
+}
+
+function renderInsight(b,c){
+  if(!b||!c)return;
+  const msgs=[];
+  if(b.btmTurn>0&&c.btmTurn>0){
+    const hi=Math.max(b.btmTurn,c.btmTurn),lo=Math.min(b.btmTurn,c.btmTurn);
+    const wn=b.btmTurn>c.btmTurn?'BISTER':'QIBAO',ls=wn==='BISTER'?'QIBAO':'BISTER';
+    if(curLang==='zh') msgs.push(`${wn} 下装周转率(${hi.toFixed(2)}次)比${ls}(${lo.toFixed(2)}次)高${(hi/lo).toFixed(1)}倍 — 建议改善${ls}下装陈列结构`);
+    else msgs.push(`${wn} 하의 회전율(${hi.toFixed(2)}회)이 ${ls}(${lo.toFixed(2)}회)보다 ${(hi/lo).toFixed(1)}배 높음 — ${ls} 하의 진열 구조 개선 필요`);
+  }
+  if(b.zeroPct>=20||c.zeroPct>=20){
+    const bad=b.zeroPct>c.zeroPct?`BISTER(${b.zeroPct}%)`:`QIBAO(${c.zeroPct}%)`;
+    if(curLang==='zh') msgs.push(`${bad} 零销售下装比例偏高 — 建议立即检查并更换`);
+    else msgs.push(`${bad} 미판매 하의 비율 높음 — 즉시 교체 검토 필요`);
+  }
+  if(msgs.length>0){
+    document.getElementById('ins-txt').textContent=msgs[0];
+    document.getElementById('ins').classList.remove('hide');
+  }
+}
+
+// init runs after JSONBlob loaded (see bottom)
+</script>
+
+<script>
+
+// ═══ JSONBLOB 공유 데이터 ═══
+const JB_KEY = 'eland_vmd_blobid'; // blob ID 저장 키
+const JB_SHARED_ID_KEY = 'eland_vmd_shared_blobid'; // 공유받은 blob ID
+
+// URL 파라미터에서 blob ID 읽기 (공유 링크로 접속 시)
+function getUrlBlobId() {
+  const p = new URLSearchParams(window.location.search);
+  return p.get('bid') || null;
+}
+
+// 공유 링크 생성
+function getShareUrl(blobId) {
+  const base = window.location.origin + window.location.pathname;
+  return base.replace(/[^/]+\.html/, 'index.html') + '?bid=' + blobId;
+}
+
+// JSONBlob에서 데이터 불러오기
+async function jbLoad(blobId) {
+  try {
+    const r = await fetch('https://jsonblob.com/api/jsonBlob/' + blobId, {
+      headers: { 'Accept': 'application/json' }
+    });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch(e) { return null; }
+}
+
+// JSONBlob에 데이터 저장 (기존 blob 업데이트)
+async function jbSave(blobId, data) {
+  try {
+    const r = await fetch('https://jsonblob.com/api/jsonBlob/' + blobId, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return r.ok;
+  } catch(e) { return false; }
+}
+
+// JSONBlob 새로 생성
+async function jbCreate(data) {
+  try {
+    const r = await fetch('https://jsonblob.com/api/jsonBlob', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!r.ok) return null;
+    const loc = r.headers.get('Location');
+    return loc ? loc.split('/').pop() : null;
+  } catch(e) { return null; }
+}
+
+// 공유 데이터 동기화 (로드 시 호출)
+async function jbSync() {
+  // URL에 bid 파라미터가 있으면 공유 링크로 접속한 것
+  const urlBid = getUrlBlobId();
+  if (urlBid) {
+    localStorage.setItem(JB_SHARED_ID_KEY, urlBid);
+  }
+  const bid = urlBid || localStorage.getItem(JB_KEY) || localStorage.getItem(JB_SHARED_ID_KEY);
+  if (!bid) return false;
+
+  const data = await jbLoad(bid);
+  if (!data) return false;
+
+  // JSONBlob 데이터를 localStorage에 반영
+  if (data.bister_xl) localStorage.setItem('bister_xl', data.bister_xl);
+  if (data.qibao_xl) localStorage.setItem('qibao_xl', data.qibao_xl);
+  if (data.bister_pins) localStorage.setItem('bister_pins', data.bister_pins);
+  if (data.qibao_pins) localStorage.setItem('qibao_pins', data.qibao_pins);
+  if (data.bister_xl_date) localStorage.setItem('bister_xl_date', data.bister_xl_date);
+  if (data.qibao_xl_date) localStorage.setItem('qibao_xl_date', data.qibao_xl_date);
+  return true;
+}
+
+// 엑셀 업로드 후 JSONBlob에 저장
+async function jbPush() {
+  const data = {
+    bister_xl: localStorage.getItem('bister_xl') || '',
+    qibao_xl: localStorage.getItem('qibao_xl') || '',
+    bister_pins: localStorage.getItem('bister_pins') || '',
+    qibao_pins: localStorage.getItem('qibao_pins') || '',
+    bister_xl_date: localStorage.getItem('bister_xl_date') || '',
+    qibao_xl_date: localStorage.getItem('qibao_xl_date') || '',
+  };
+
+  let bid = localStorage.getItem(JB_KEY);
+  if (bid) {
+    const ok = await jbSave(bid, data);
+    if (!ok) bid = null; // 실패 시 새로 생성
+  }
+  if (!bid) {
+    bid = await jbCreate(data);
+    if (bid) localStorage.setItem(JB_KEY, bid);
+  }
+  return bid;
+}
+
+// 공유 링크 복사 버튼
+async function copyShareLink() {
+  const btn = document.getElementById('share-link-btn');
+  if (btn) { btn.textContent = '⏳ 저장 중...'; btn.disabled = true; }
+  
+  const bid = await jbPush();
+  if (!bid) {
+    if (btn) { btn.textContent = '❌ 실패'; btn.disabled = false; }
+    alert('데이터 저장 실패. 엑셀을 먼저 업로드해주세요.');
+    return;
+  }
+
+  const url = 'https://snazzy-chebakia-00a39a.netlify.app/?bid=' + bid;
+  try {
+    await navigator.clipboard.writeText(url);
+    if (btn) { 
+      btn.textContent = '✓ 링크 복사됨!'; 
+      setTimeout(() => { btn.textContent = '🔗 공유 링크 복사'; btn.disabled = false; }, 2500);
+    }
+  } catch(e) {
+    prompt('이 링크를 복사하세요:', url);
+    if (btn) { btn.textContent = '🔗 공유 링크 복사'; btn.disabled = false; }
+  }
+}
+
+// ═══ I18N ═══
+const I18N={
+  ko:{
+    nav_dual:'듀얼 스토어', nav_btm:'하의 비교 분석', nav_bister:'BISTER 도면', nav_qibao:'QIBAO 도면',
+    hero_sub:'이랜드 EBG — 듀얼 스토어 VMD 대시보드',
+    data_none:'데이터 없음', data_upd:'업데이트: ',
+    rev_w:'여성 매출 (¥)', btm_w:'여성 하의 스타일', turn_w:'하의 회전율',
+    cat_ttl:'카테고리 매출 구성',
+    s_pins:'집기 수량', s_sku:'스타일 수 / SKU', s_qty:'여성 판매 수량',
+    s_dqty:'여성 진열 수량', s_btmrev:'하의 매출 / 전체 비중',
+    s_zero:'미판매 하의', s_eff:'진열 1장당 매출', s_top:'TOP 집기',
+    btn_b:'→ BISTER 도면 상세 보기', btn_c:'→ QIBAO 도면 상세 보기',
+    loc_b:'SUZHOU VILLAGE', loc_c:'SHANGHAI QIBAO · 七宝',
+    qbtn_btm_lbl:'하의 비교 분석', qbtn_btm_sub:'회전율 · 집기 효율 · 재고',
+    qbtn_b_lbl:'BISTER 도면', qbtn_b_sub:'집기 클릭 → 상품·분석·편집',
+    qbtn_c_lbl:'QIBAO 도면', qbtn_c_sub:'집기 클릭 → 상품·분석·편집',
+    ins_lnk:'하의 비교 분석 →',
+    cat_top:'상의', cat_btm:'하의', cat_dress:'원피스', cat_acc:'액세서리', cat_etc:'기타',
+    zone_w:'여성존', zone_m:'남성존', zone_win:'윈도우',
+    upload_after:'엑셀 업로드 후',
+    turn_sub_tpl:(s,d)=>`판매${s}÷진열${d}`,
+    btmrev_tpl:(r,p)=>`${r} · 전체의 ${p}%`,
+    zero_tpl:(n,p)=>`${n}종 (${p}%)`,
+    top_tpl:(code,name,rev)=>`${code} ${name} ${rev}`,
+    eff_unit:'¥/장', btm_unit:'종', pin_unit:'개', sku_unit:'종 · SKU ', sku_unit2:'개',
+    qty_unit:'장', unsold:'미판매 ', unsold_unit:'종',
+  },
+  zh:{
+    nav_dual:'双店概览', nav_btm:'下装对比分析', nav_bister:'BISTER 平面图', nav_qibao:'QIBAO 平面图',
+    hero_sub:'衣恋 EBG — 双店 VMD 数据看板',
+    data_none:'暂无数据', data_upd:'更新时间: ',
+    rev_w:'女装销售额 (¥)', btm_w:'女装下装款式', turn_w:'下装周转率',
+    cat_ttl:'品类销售构成',
+    s_pins:'陈列道具数', s_sku:'款式数 / SKU', s_qty:'女装销售件数',
+    s_dqty:'女装陈列件数', s_btmrev:'下装销售额 / 占比',
+    s_zero:'零销售下装', s_eff:'每件陈列产出', s_top:'TOP 道具',
+    btn_b:'→ 查看 BISTER 详细平面图', btn_c:'→ 查看 QIBAO 详细平面图',
+    loc_b:'苏州奥特莱斯', loc_c:'上海七宝万科',
+    qbtn_btm_lbl:'下装对比分析', qbtn_btm_sub:'周转率 · 道具效率 · 库存',
+    qbtn_b_lbl:'BISTER 平面图', qbtn_b_sub:'点击道具 → 商品·分析·编辑',
+    qbtn_c_lbl:'QIBAO 平面图', qbtn_c_sub:'点击道具 → 商品·分析·编辑',
+    ins_lnk:'下装对比分析 →',
+    cat_top:'上装', cat_btm:'下装', cat_dress:'连衣裙', cat_acc:'配饰', cat_etc:'其他',
+    zone_w:'女装区', zone_m:'男装区', zone_win:'橱窗',
+    upload_after:'上传Excel后显示',
+    turn_sub_tpl:(s,d)=>`销售${s}÷陈列${d}`,
+    btmrev_tpl:(r,p)=>`${r} · 占总销售 ${p}%`,
+    zero_tpl:(n,p)=>`${n}款 (${p}%)`,
+    top_tpl:(code,name,rev)=>`${code} ${name} ${rev}`,
+    eff_unit:'¥/件', btm_unit:'款', pin_unit:'个', sku_unit:'款 · SKU ', sku_unit2:'个',
+    qty_unit:'件', unsold:'零销售 ', unsold_unit:'款',
+  }
+};
+const CAT_NAME_MAP={
+  ko:{'상의':'상의','하의':'하의','원피스':'원피스','액세서리':'액세서리','기타':'기타'},
+  zh:{'상의':'上装','하의':'下装','원피스':'连衣裙','액세서리':'配饰','기타':'其他'}
+};
+
+let curLang=localStorage.getItem('lang')||'ko';
+
+function applyI18N(){
+  const t=I18N[curLang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(t[k]!==undefined) el.textContent=t[k];
+  });
+  const btn=document.getElementById('lang-toggle');
+  if(btn) btn.textContent=curLang==='ko'?'中文':'한국어';
+}
+
+function toggleLang(){
+  curLang=curLang==='ko'?'zh':'ko';
+  localStorage.setItem('lang',curLang);
+  // re-render all dynamic content
+  const bRes2=loadStore('bister','bister_pins');
+  const cRes2=loadStore('qibao','qibao_pins');
+  renderInsight(bRes2,cRes2);
+  applyI18N();
+}
+
+// Patch loadStore to use I18N
+const _origLoadStore=loadStore;
+</script>
+
+<script>
+// ═══ EXPORT (공유용 파일 내보내기) ═══
+function exportSharedFile(){
+  try{
+    const bx=lsGet('bister_xl');
+    const cx=lsGet('qibao_xl');
+    const bp=lsGet('bister_pins');
+    const cp=lsGet('qibao_pins');
+    const bDate=lsGet('bister_xl_date')||'—';
+    const cDate=lsGet('qibao_xl_date')||'—';
+
+    if(!bx&&!cx){
+      alert(curLang==='zh'?'请先上传Excel数据后再导出。':'엑셀 데이터를 먼저 업로드한 후 내보내기 해주세요.');
+      return;
+    }
+
+    const btn=document.getElementById('export-btn');
+    if(btn){btn.textContent=curLang==='zh'?'생성 중...':'생성 중...';btn.disabled=true;}
+
+    // 현재 페이지 HTML 소스 가져오기
+    const src=document.documentElement.outerHTML;
+
+    // PRESET 상수들을 실제 데이터로 교체
+    let out=src;
+
+    if(bx){
+      // PRESET_B_XD 교체
+      out=out.replace(/const PRESET_B_XD=\{[^;]+\};/, 'const PRESET_B_XD='+bx+';');
+    }
+    if(cx){
+      // PRESET_Q_XD 교체
+      out=out.replace(/const PRESET_Q_XD=\{[^;]+\};/, 'const PRESET_Q_XD='+cx+';');
+    }
+    if(bp){
+      // PRESET_B_PINS 교체
+      out=out.replace(/const PRESET_B_PINS=\[[^\]]+\];/, 'const PRESET_B_PINS='+bp+';');
+    }
+    if(cp){
+      // PRESET_Q_PINS 교체
+      out=out.replace(/const PRESET_Q_PINS=\[[^\]]+\];/, 'const PRESET_Q_PINS='+cp+';');
+    }
+
+    // 날짜 파일명
+    const today=new Date().toISOString().slice(0,10).replace(/-/g,'');
+    const fname=document.title.replace(/[^a-zA-Z0-9가-힣]/g,'_').replace(/__+/g,'_')+'_'+today+'.html';
+
+    // 다운로드
+    const blob=new Blob([out],{type:'text/html;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url; a.download=fname; a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),3000);
+
+    if(btn){
+      btn.textContent=curLang==='zh'?'✓ 다운로드 완료':'✓ 다운로드 완료';
+      setTimeout(()=>{
+        btn.textContent=curLang==='zh'?'📤 공유용 파일 내보내기':'📤 공유용 파일 내보내기';
+        btn.disabled=false;
+      },2500);
+    }
+  }catch(e){
+    console.error(e);
+    alert(curLang==='zh'?'导出失败: '+e.message:'내보내기 실패: '+e.message);
+    const btn=document.getElementById('export-btn');
+    if(btn){btn.textContent='📤 공유용 파일 내보내기';btn.disabled=false;}
+  }
+}
+</script>
+
+<script>
+// ═══ INIT ═══
+jbSync().then(()=>{
+  const bRes=loadStore('bister','bister_pins');
+  const cRes=loadStore('qibao','qibao_pins');
+  renderInsight(bRes,cRes);
+  applyI18N();
+});
+</script>
+</body>
+</html>
